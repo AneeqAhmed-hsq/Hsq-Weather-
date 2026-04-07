@@ -50,7 +50,7 @@ define('HSQ_WEATHER_PLUGIN_BASENAME', plugin_basename(__FILE__));
 // Include required files
 require_once HSQ_WEATHER_PLUGIN_DIR . 'includes/class-weather-api.php';
 require_once HSQ_WEATHER_PLUGIN_DIR . 'includes/class-weather-cache.php';
-require_once HSQ_WEATHER_PLUGIN_DIR . 'admin/class-admin-settings.php';
+require_once HSQ_WEATHER_PLUGIN_DIR . 'Admin/class-admin-settings.php';
 require_once HSQ_WEATHER_PLUGIN_DIR . 'public/class-public-display.php';
 
 // Activation hook
