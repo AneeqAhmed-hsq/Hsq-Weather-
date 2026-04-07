@@ -535,30 +535,70 @@ class HSQ_Weather_Admin_Settings {
      * Render Manage Weather Page (Cities Management)
      */
     public function render_manage_weather_page() {
-        $settings = get_option('hsq_weather_settings');
-        $cities = isset($settings['cities']) ? $settings['cities'] : array();
+        $templates = get_option('hsq_weather_templates', array());
         ?>
+        <style>
+            .hsq-manage-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+            .hsq-manage-header h1 { margin: 0; }
+            .hsq-manage-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #ccd0d4; }
+            .hsq-manage-table thead { background: #f5f5f5; }
+            .hsq-manage-table th { padding: 15px; text-align: left; border-bottom: 1px solid #ccd0d4; font-weight: 600; color: #23282d; }
+            .hsq-manage-table td { padding: 15px; border-bottom: 1px solid #eee; }
+            .hsq-manage-table tbody tr:hover { background: #f9f9f9; }
+            .hsq-manage-empty { text-align: center; padding: 60px 20px; color: #666; }
+            .hsq-action-links { display: flex; gap: 10px; }
+            .hsq-action-links a { color: #0073aa; text-decoration: none; font-size: 13px; }
+            .hsq-action-links a:hover { color: #005a87; }
+            .hsq-layout-badge { display: inline-block; padding: 4px 10px; background: #e8f5e9; color: #2e7d32; border-radius: 4px; font-size: 12px; }
+            .hsq-filter-tabs { margin-bottom: 15px; }
+            .hsq-filter-tabs a { display: inline-block; padding: 8px 12px; margin-right: 15px; text-decoration: none; color: #666; }
+            .hsq-filter-tabs a.active { color: #0073aa; border-bottom: 3px solid #0073aa; }
+        </style>
         <div class="wrap hsq-manage-weather">
-            <h1><?php _e('Manage Weather Cities', 'hsq-weather'); ?></h1>
-            
-            <div class="hsq-add-city">
-                <input type="text" id="hsq-city-search" placeholder="<?php _e('Search city name...', 'hsq-weather'); ?>" autocomplete="off">
-                <div id="hsq-search-results" style="display:none;"></div>
-                <button type="button" id="hsq-add-city-btn" class="button button-primary"><?php _e('Add City', 'hsq-weather'); ?></button>
+            <div class="hsq-manage-header">
+                <h1><?php _e('Manage Weather', 'hsq-weather'); ?></h1>
+                <a href="#" class="button button-primary"><?php _e('Add New Weather', 'hsq-weather'); ?></a>
             </div>
-            
-            <div class="hsq-cities-list">
-                <h3><?php _e('Cities (Drag to reorder)', 'hsq-weather'); ?></h3>
-                <ul id="hsq-cities-sortable">
-                    <?php foreach ($cities as $index => $city): ?>
-                        <li data-index="<?php echo $index; ?>" data-lat="<?php echo esc_attr($city['lat']); ?>" data-lon="<?php echo esc_attr($city['lon']); ?>">
-                            <span class="drag-handle">⋮⋮</span>
-                            <span class="city-name"><?php echo esc_html($city['name']); ?></span>
-                            <button type="button" class="hsq-delete-city button button-small"><?php _e('Delete', 'hsq-weather'); ?></button>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+
+            <div class="hsq-filter-tabs">
+                <a href="#" class="active"><?php _e('All', 'hsq-weather'); ?> (<?php echo count($templates); ?>)</a>
             </div>
+
+            <?php if (empty($templates)): ?>
+                <div class="hsq-manage-empty">
+                    <p><?php _e('No posts found.', 'hsq-weather'); ?></p>
+                </div>
+            <?php else: ?>
+                <table class="hsq-manage-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th><?php _e('Title', 'hsq-weather'); ?></th>
+                            <th><?php _e('Shortcode', 'hsq-weather'); ?></th>
+                            <th><?php _e('Layout', 'hsq-weather'); ?></th>
+                            <th><?php _e('Date', 'hsq-weather'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($templates as $template): ?>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>
+                                    <strong><a href="#"><?php echo esc_html($template['name']); ?></a></strong>
+                                    <div class="hsq-action-links">
+                                        <a href="#"><?php _e('Edit', 'hsq-weather'); ?></a>
+                                        <a href="#"><?php _e('Delete', 'hsq-weather'); ?></a>
+                                        <a href="#"><?php _e('Duplicate', 'hsq-weather'); ?></a>
+                                    </div>
+                                </td>
+                                <td><code>[hsq_weather id="<?php echo esc_attr($template['id']); ?>"]</code></td>
+                                <td><span class="hsq-layout-badge"><?php echo isset($template['layout']) ? esc_html($template['layout']) : 'Grid'; ?></span></td>
+                                <td><?php echo isset($template['created']) ? date('M d, Y', strtotime($template['created'])) : 'N/A'; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
         <?php
     }
