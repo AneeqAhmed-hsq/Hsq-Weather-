@@ -292,9 +292,40 @@ class HSQ_Weather_Admin_Settings {
     }
 
     /**
+     * Render admin header tabs
+     */
+    public function render_admin_header($active = 'blocks') {
+        $tabs = array(
+            'getting-started' => __('Getting Started', 'hsq-weather'),
+            'blocks' => __('Blocks', 'hsq-weather'),
+            'templates' => __('Saved Templates', 'hsq-weather'),
+            'settings' => __('Settings', 'hsq-weather'),
+            'lite-vs-pro' => __('Lite vs Pro', 'hsq-weather'),
+            'about' => __('About Us', 'hsq-weather'),
+        );
+        ?>
+        <div class="hsq-admin-header">
+            <div class="hsq-admin-title">
+                <div class="hsq-admin-logo">☁️</div>
+                <div>
+                    <h1><?php _e('Location Weather', 'hsq-weather'); ?></h1>
+                    <p><?php _e('Manage weather blocks, settings and templates.', 'hsq-weather'); ?></p>
+                </div>
+            </div>
+            <nav class="hsq-admin-tabs">
+                <?php foreach ($tabs as $slug => $label): ?>
+                    <a href="?page=hsq-weather-<?php echo esc_attr($slug); ?>" class="hsq-admin-tab<?php echo $active === $slug ? ' active' : ''; ?>"><?php echo esc_html($label); ?></a>
+                <?php endforeach; ?>
+            </nav>
+        </div>
+        <?php
+    }
+
+    /**
      * Render Dashboard Page
      */
     public function render_dashboard_page() {
+        $this->render_admin_header('getting-started');
         ?>
         <div class="wrap hsq-weather-dashboard">
             <h1><?php _e('HSQ Weather Dashboard', 'hsq-weather'); ?></h1>
@@ -374,6 +405,7 @@ class HSQ_Weather_Admin_Settings {
      * Render Blocks Page - Professional Layout
      */
     public function render_blocks_page() {
+        $this->render_admin_header('blocks');
         $blocks = array(
             array('title' => 'Weather Card', 'icon' => '🌤️', 'description' => 'Display single city weather in beautiful card layout', 'pro' => false, 'slug' => 'weather-card'),
             array('title' => 'Weather Horizontal', 'icon' => '🟦', 'description' => 'Display horizontal weather cards in a slider', 'pro' => false, 'slug' => 'weather-horizontal'),
@@ -392,17 +424,42 @@ class HSQ_Weather_Admin_Settings {
             array('title' => 'Section Heading', 'icon' => 'H', 'description' => 'Add elegant section headings anywhere', 'pro' => false, 'slug' => 'section-heading'),
             array('title' => 'Location Weather Shortcode', 'icon' => '📍', 'description' => 'Display weather using shortcode for any location', 'pro' => false, 'slug' => 'shortcode')
         );
+        $pro_blocks = 0;
+        foreach ($blocks as $block) {
+            if (! empty($block['pro'])) {
+                $pro_blocks++;
+            }
+        }
         ?>
         <div class="wrap hsq-blocks-page">
             <div class="hsq-blocks-header">
-                <h1><?php _e('Weather Blocks', 'hsq-weather'); ?></h1>
-                <p><?php _e('Explore available blocks for Gutenberg editor.', 'hsq-weather'); ?></p>
+                <div class="hsq-blocks-header-top">
+                    <div>
+                        <h1><?php _e('Location Weather Blocks', 'hsq-weather'); ?></h1>
+                        <p><?php _e('Browse available weather blocks and enable them for use inside Gutenberg.', 'hsq-weather'); ?></p>
+                    </div>
+                    <a href="?page=hsq-weather-settings" class="button button-primary hsq-blocks-action"><?php _e('Block Settings', 'hsq-weather'); ?></a>
+                </div>
+                <div class="hsq-blocks-summary">
+                    <div class="hsq-summary-item">
+                        <span><?php echo count($blocks); ?></span>
+                        <strong><?php _e('Blocks Available', 'hsq-weather'); ?></strong>
+                    </div>
+                    <div class="hsq-summary-item">
+                        <span><?php echo esc_html($pro_blocks); ?></span>
+                        <strong><?php _e('Pro Blocks', 'hsq-weather'); ?></strong>
+                    </div>
+                    <div class="hsq-summary-item">
+                        <span>0</span>
+                        <strong><?php _e('Enabled', 'hsq-weather'); ?></strong>
+                    </div>
+                </div>
             </div>
-            
+
             <div class="hsq-blocks-grid">
                 <?php foreach ($blocks as $block): ?>
                     <div class="hsq-block-card<?php echo $block['pro'] ? ' hsq-pro-card' : ''; ?>">
-                        <div class="hsq-block-card-left">
+                        <div class="hsq-block-card-main">
                             <div class="hsq-block-card-icon"><?php echo esc_html($block['icon']); ?></div>
                             <div class="hsq-block-card-info">
                                 <h3><?php echo esc_html($block['title']); ?><?php if ($block['pro']): ?> <span class="hsq-pro-label"><?php _e('Pro', 'hsq-weather'); ?></span><?php endif; ?></h3>
@@ -414,14 +471,17 @@ class HSQ_Weather_Admin_Settings {
                                 </div>
                             </div>
                         </div>
-                        <label class="hsq-toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="hsq-slider"></span>
-                        </label>
+                        <div class="hsq-block-card-actions">
+                            <label class="hsq-toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="hsq-slider"></span>
+                            </label>
+                            <span class="hsq-block-status"><?php _e('Enabled', 'hsq-weather'); ?></span>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
-        
+
             <div class="hsq-blocks-footer">
                 <a href="#" class="hsq-full-features-btn">
                     <?php _e('See Full Features →', 'hsq-weather'); ?>
