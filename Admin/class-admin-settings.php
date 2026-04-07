@@ -625,6 +625,15 @@ class HSQ_Weather_Admin_Settings {
             'combined' => array('icon' => '🔗', 'name' => 'Combined', 'desc' => 'Mixed layout', 'preview' => '<div style="display: grid; gap: 8px;"><div style="height: 30px; background: #f3f4f6; border-radius: 8px;"></div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"><div style="height: 28px; background: #f3f4f6; border-radius: 8px;"></div><div style="height: 28px; background: #f3f4f6; border-radius: 8px;"></div></div></div>'),
             'weather-map' => array('icon' => '🗺️', 'name' => 'Weather Map', 'desc' => 'Interactive map', 'preview' => '<div style="height: 90px; background: #f3f4f6; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #9ca3af;">Map preview</div>')
         );
+
+        $templates = array(
+            'template-one' => __('Template One', 'hsq-weather'),
+            'template-two' => __('Template Two', 'hsq-weather'),
+            'template-three' => __('Template Three', 'hsq-weather'),
+            'template-four' => __('Template Four', 'hsq-weather'),
+            'template-five' => __('Template Five', 'hsq-weather'),
+            'template-six' => __('Template Six', 'hsq-weather'),
+        );
         
         // Sample weather data for preview
         $sample_weather = array(
@@ -693,6 +702,14 @@ class HSQ_Weather_Admin_Settings {
             .hsq-preview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
             .hsq-preview-grid .hsq-weather-card { border-radius: 16px; border: 1px solid #e5e7eb; background: #fff; padding: 18px; }
             .hsq-preview-tabs .hsq-weather-card { padding: 18px; }
+            .hsq-templates-section { margin-top: 20px; }
+            .hsq-template-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 14px; }
+            .hsq-template-card { border: 2px solid #e5e7eb; border-radius: 12px; padding: 14px; background: #fff; cursor: pointer; transition: all 0.2s ease; text-align: center; }
+            .hsq-template-card.active, .hsq-template-card:hover { border-color: #667eea; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.12); }
+            .hsq-template-thumb { display: grid; gap: 5px; margin-bottom: 10px; }
+            .hsq-template-row { height: 8px; background: #e5e7eb; border-radius: 999px; }
+            .hsq-template-row.short { width: 60%; margin-left: auto; }
+            .hsq-template-row.half { width: 50%; }
             @media (max-width: 768px) { .hsq-two-col { grid-template-columns: 1fr; } .hsq-preview-horizontal .hsq-horizontal-wrapper { min-width: auto; flex-wrap: wrap; } }
         </style>
         <div class="wrap">
@@ -724,6 +741,23 @@ class HSQ_Weather_Admin_Settings {
                                 <div class="desc"><?php echo esc_html($layout['desc']); ?></div>
                             </div>
                         <?php endforeach; ?>
+                    </div>
+                    <div class="hsq-templates-section">
+                        <h2><?php _e('Templates', 'hsq-weather'); ?></h2>
+                        <div class="hsq-template-grid">
+                            <?php foreach ($templates as $key => $label): ?>
+                                <?php $template_active = $key === 'template-one' ? ' active' : ''; ?>
+                                <div class="hsq-template-card<?php echo $template_active; ?>" data-template="<?php echo esc_attr($key); ?>" onclick="selectTemplate('<?php echo esc_attr($key); ?>')">
+                                    <div class="hsq-template-thumb">
+                                        <div class="hsq-template-row"></div>
+                                        <div class="hsq-template-row short"></div>
+                                        <div class="hsq-template-row"></div>
+                                        <div class="hsq-template-row half"></div>
+                                    </div>
+                                    <div class="name"><?php echo esc_html($label); ?></div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                     <p class="description"><?php _e('To create eye-catching Weather Layouts with Graph Charts and access to advanced customizations, Upgrade to Pro!', 'hsq-weather'); ?></p>
                 </div>
@@ -828,12 +862,31 @@ class HSQ_Weather_Admin_Settings {
 
         <script>
         const sampleWeather = <?php echo json_encode($sample_weather); ?>;
+        const templateOptions = {
+            'template-one': { city: sampleWeather.city, icon: '☀️', temp: sampleWeather.temperature, wind: sampleWeather.wind_speed },
+            'template-two': { city: 'Paris', icon: '⛅', temp: sampleWeather.temperature - 3, wind: sampleWeather.wind_speed + 5 },
+            'template-three': { city: 'Berlin', icon: '🌧️', temp: sampleWeather.temperature - 1, wind: sampleWeather.wind_speed + 2 },
+            'template-four': { city: 'Tokyo', icon: '🌤️', temp: sampleWeather.temperature + 2, wind: Math.max(sampleWeather.wind_speed - 3, 0) },
+            'template-five': { city: 'Sydney', icon: '🌦️', temp: sampleWeather.temperature + 4, wind: sampleWeather.wind_speed + 1 },
+            'template-six': { city: 'Dubai', icon: '☀️', temp: sampleWeather.temperature + 7, wind: sampleWeather.wind_speed + 3 },
+        };
         let selectedLayout = 'horizontal';
+        let selectedTemplate = 'template-one';
 
         function selectLayout(layout) {
             selectedLayout = layout;
             document.querySelectorAll('.hsq-layout-card').forEach(card => card.classList.remove('active'));
             const selectedCard = document.querySelector('[data-layout="' + layout + '"]');
+            if (selectedCard) {
+                selectedCard.classList.add('active');
+            }
+            updatePreview();
+        }
+
+        function selectTemplate(template) {
+            selectedTemplate = template;
+            document.querySelectorAll('.hsq-template-card').forEach(card => card.classList.remove('active'));
+            const selectedCard = document.querySelector('[data-template="' + template + '"]');
             if (selectedCard) {
                 selectedCard.classList.add('active');
             }
@@ -862,6 +915,7 @@ class HSQ_Weather_Admin_Settings {
                     </div>`;
                     break;
                 case 'horizontal':
+                    const templateData = templateOptions[selectedTemplate] || templateOptions['template-one'];
                     html = `<div class="hsq-preview-horizontal">
                         <div class="hsq-horizontal-wrapper">
                             <div class="hsq-horizontal-card">
@@ -871,10 +925,10 @@ class HSQ_Weather_Admin_Settings {
                                 <div class="hsq-wind">💨 ${sampleWeather.wind_speed} km/h</div>
                             </div>
                             <div class="hsq-horizontal-card">
-                                <div class="hsq-city-name">Paris</div>
-                                <div class="hsq-weather-icon">⛅</div>
-                                <div class="hsq-temperature">${sampleWeather.temperature - 3}°C</div>
-                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed + 5} km/h</div>
+                                <div class="hsq-city-name">${templateData.city}</div>
+                                <div class="hsq-weather-icon">${templateData.icon}</div>
+                                <div class="hsq-temperature">${templateData.temp}°C</div>
+                                <div class="hsq-wind">💨 ${templateData.wind} km/h</div>
                             </div>
                         </div>
                     </div>`;
