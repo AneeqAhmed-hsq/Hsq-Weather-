@@ -616,14 +616,26 @@ class HSQ_Weather_Admin_Settings {
      */
     public function render_add_new_weather_page() {
         $layouts = array(
-            'vertical-card' => array('icon' => '📋', 'name' => 'Vertical Card', 'desc' => 'Clean vertical layout'),
-            'horizontal' => array('icon' => '➡️', 'name' => 'Horizontal', 'desc' => 'Side-by-side layout'),
-            'table' => array('icon' => '📊', 'name' => 'Table', 'desc' => 'Table format'),
-            'tabs' => array('icon' => '📑', 'name' => 'Tabs', 'desc' => 'Tabbed view'),
-            'accordion' => array('icon' => '📁', 'name' => 'Accordion', 'desc' => 'Collapsible items'),
-            'grid' => array('icon' => '🔲', 'name' => 'Grid', 'desc' => 'Grid layout'),
-            'combined' => array('icon' => '🔗', 'name' => 'Combined', 'desc' => 'Mixed layout'),
-            'weather-map' => array('icon' => '🗺️', 'name' => 'Weather Map', 'desc' => 'Interactive map')
+            'vertical-card' => array('icon' => '📋', 'name' => 'Vertical Card', 'desc' => 'Clean vertical layout', 'demo' => '📋'),
+            'horizontal' => array('icon' => '➡️', 'name' => 'Horizontal', 'desc' => 'Side-by-side layout', 'demo' => '➡️'),
+            'table' => array('icon' => '📊', 'name' => 'Table', 'desc' => 'Table format', 'demo' => '📊'),
+            'tabs' => array('icon' => '📑', 'name' => 'Tabs', 'desc' => 'Tabbed view', 'demo' => '📑'),
+            'accordion' => array('icon' => '📁', 'name' => 'Accordion', 'desc' => 'Collapsible items', 'demo' => '📁'),
+            'grid' => array('icon' => '🔲', 'name' => 'Grid', 'desc' => 'Grid layout', 'demo' => '🔲'),
+            'combined' => array('icon' => '🔗', 'name' => 'Combined', 'desc' => 'Mixed layout', 'demo' => '🔗'),
+            'weather-map' => array('icon' => '🗺️', 'name' => 'Weather Map', 'desc' => 'Interactive map', 'demo' => '🗺️')
+        );
+        
+        // Sample weather data for preview
+        $sample_weather = array(
+            'city' => 'London, GB',
+            'temperature' => 32,
+            'condition' => 'Partly Cloudy',
+            'humidity' => 65,
+            'wind_speed' => 12,
+            'pressure' => 1013,
+            'visibility' => 10,
+            'feels_like' => 28
         );
         ?>
         <style>
@@ -632,13 +644,16 @@ class HSQ_Weather_Admin_Settings {
             .hsq-add-weather-header .badge { background: rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
             .hsq-form-section { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
             .hsq-form-section h2 { margin-top: 0; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; font-size: 18px; }
-            .hsq-layout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 20px 0; }
-            .hsq-layout-card { border: 2px solid #e5e7eb; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+            .hsq-layout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin: 20px 0; }
+            .hsq-layout-card { border: 2px solid #e5e7eb; border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: #fff; }
             .hsq-layout-card:hover { border-color: #fb923c; background: #fff9f5; }
             .hsq-layout-card.active { border-color: #fb923c; background: #fff9f5; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1); }
             .hsq-layout-card .icon { font-size: 32px; margin-bottom: 10px; display: block; }
-            .hsq-layout-card .name { font-weight: 600; font-size: 14px; color: #111827; }
-            .hsq-layout-card .desc { font-size: 12px; color: #6b7280; margin-top: 5px; }
+            .hsq-layout-card .name { font-weight: 600; font-size: 13px; color: #111827; }
+            .hsq-layout-card .desc { font-size: 11px; color: #6b7280; margin-top: 5px; }
+            .hsq-preview-section { background: #f8fafc; border: 2px dashed #d1d5db; border-radius: 10px; padding: 30px; margin: 24px 0; min-height: 300px; }
+            .hsq-preview-title { font-size: 14px; font-weight: 600; color: #6b7280; margin-bottom: 15px; text-transform: uppercase; }
+            .hsq-preview-content { background: white; border-radius: 8px; padding: 20px; }
             .hsq-form-group { margin-bottom: 20px; }
             .hsq-form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #111827; }
             .hsq-form-group input[type="text"], .hsq-form-group select { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
@@ -651,6 +666,22 @@ class HSQ_Weather_Admin_Settings {
             .hsq-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
             .hsq-full-width { grid-column: 1 / -1; }
             .hsq-save-actions { display: flex; gap: 10px; margin-top: 30px; }
+            
+            /* Preview Layouts */
+            .hsq-preview-vertical { display: flex; flex-direction: column; gap: 6px; }
+            .hsq-preview-vertical .temp { font-size: 32px; font-weight: bold; color: #1e40af; }
+            .hsq-preview-vertical .info { font-size: 12px; color: #666; border-top: 1px solid #eee; padding-top: 6px; }
+            .hsq-preview-horizontal { display: flex; gap: 20px; align-items: center; }
+            .hsq-preview-horizontal .temp { font-size: 48px; font-weight: bold; color: #1e40af; }
+            .hsq-preview-horizontal .details { flex: 1; font-size: 13px; }
+            .hsq-preview-table { width: 100%; font-size: 13px; }
+            .hsq-preview-table th, .hsq-preview-table td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+            .hsq-preview-table th { background: #f3f4f6; font-weight: 600; }
+            .hsq-preview-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+            .hsq-preview-tabs button { padding: 6px 12px; background: #e5e7eb; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+            .hsq-preview-tabs button.active { background: #fb923c; color: white; }
+            .hsq-preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .hsq-preview-grid-item { background: #f3f4f6; padding: 12px; border-radius: 6px; text-align: center; font-size: 12px; }
             @media (max-width: 768px) { .hsq-two-col { grid-template-columns: 1fr; } }
         </style>
         <div class="wrap">
@@ -670,26 +701,35 @@ class HSQ_Weather_Admin_Settings {
                     </div>
                 </div>
 
-                <!-- Layout Templates -->
+                <!-- Layout Templates with Preview -->
                 <div class="hsq-form-section">
                     <h2><?php _e('Choose Layout Template', 'hsq-weather'); ?></h2>
                     <div class="hsq-layout-grid">
                         <?php foreach ($layouts as $key => $layout): ?>
-                            <div class="hsq-layout-card" data-layout="<?php echo esc_attr($key); ?>">
+                            <div class="hsq-layout-card" data-layout="<?php echo esc_attr($key); ?>" onclick="selectLayout('<?php echo esc_attr($key); ?>')">
                                 <span class="icon"><?php echo $layout['icon']; ?></span>
                                 <div class="name"><?php echo esc_html($layout['name']); ?></div>
                                 <div class="desc"><?php echo esc_html($layout['desc']); ?></div>
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <p class="description"><?php _e('To create your catch Weather Layouts with Graph Charts and access to advanced customizations, Upgrade to Pro', 'hsq-weather'); ?></p>
+                    <p class="description"><?php _e('To create eye-catching Weather Layouts with Graph Charts and access to advanced customizations, Upgrade to Pro!', 'hsq-weather'); ?></p>
+                </div>
+
+                <!-- Live Preview Section -->
+                <div class="hsq-preview-section">
+                    <div class="hsq-preview-title"><?php _e('Live Preview', 'hsq-weather'); ?></div>
+                    <div class="hsq-preview-content" id="hsq-preview">
+                        <div style="text-align: center; color: #999; padding: 40px;">
+                            <?php _e('Select a layout to see preview', 'hsq-weather'); ?>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Display Settings Tabs -->
                 <div class="hsq-form-section">
                     <div class="hsq-tabs">
                         <button type="button" class="tab-btn active" data-tab="my-items"><?php _e('My Items', 'hsq-weather'); ?></button>
-                        <button type="button" class="tab-btn" data-tab="pro-id"><?php _e('Pro ID', 'hsq-weather'); ?></button>
                         <button type="button" class="tab-btn" data-tab="craft"><?php _e('Craft', 'hsq-weather'); ?></button>
                         <button type="button" class="tab-btn" data-tab="customization"><?php _e('Customization', 'hsq-weather'); ?></button>
                     </div>
@@ -700,7 +740,7 @@ class HSQ_Weather_Admin_Settings {
                         <div class="hsq-two-col">
                             <div class="hsq-form-group">
                                 <label><?php _e('City Name', 'hsq-weather'); ?></label>
-                                <input type="text" placeholder="<?php _e('London, GB', 'hsq-weather'); ?>">
+                                <input type="text" id="city-name" placeholder="<?php _e('London, GB', 'hsq-weather'); ?>" onchange="updatePreview()">
                                 <small><?php _e('Write your city name and country code only', 'hsq-weather'); ?></small>
                             </div>
                             <div class="hsq-form-group">
@@ -714,16 +754,7 @@ class HSQ_Weather_Admin_Settings {
                                 <label><?php _e('Display Weather For Visitors Location (Auto Detect)', 'hsq-weather'); ?></label>
                                 <button type="button" class="button"><?php _e('Select Location', 'hsq-weather'); ?></button>
                             </div>
-                            <div class="hsq-form-group">
-                                <label><?php _e('Custom Weather Search', 'hsq-weather'); ?></label>
-                                <button type="button" class="button"><?php _e('Search', 'hsq-weather'); ?></button>
-                            </div>
                         </div>
-                    </div>
-
-                    <!-- Pro ID Tab -->
-                    <div class="hsq-tab-content" data-tab="pro-id">
-                        <p><?php _e('Pro features available in paid version', 'hsq-weather'); ?></p>
                     </div>
 
                     <!-- Craft Tab -->
@@ -763,7 +794,7 @@ class HSQ_Weather_Admin_Settings {
                         <div class="hsq-form-group">
                             <label><?php _e('Wind Speed Unit', 'hsq-weather'); ?></label>
                             <select>
-                                <option><?php _e('Mhu per hour (mph)', 'hsq-weather'); ?></option>
+                                <option><?php _e('Mph per hour (mph)', 'hsq-weather'); ?></option>
                             </select>
                         </div>
                         <div class="hsq-form-group">
@@ -784,12 +815,105 @@ class HSQ_Weather_Admin_Settings {
         </div>
 
         <script>
-        document.querySelectorAll('.hsq-layout-card').forEach(card => {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.hsq-layout-card').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+        const sampleWeather = <?php echo json_encode($sample_weather); ?>;
+        let selectedLayout = null;
+
+        function selectLayout(layout) {
+            selectedLayout = layout;
+            document.querySelectorAll('.hsq-layout-card').forEach(card => card.classList.remove('active'));
+            document.querySelector('[data-layout="' + layout + '"]').classList.add('active');
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const preview = document.getElementById('hsq-preview');
+            if (!selectedLayout) return;
+
+            let html = '';
+            switch(selectedLayout) {
+                case 'vertical-card':
+                    html = `<div class="hsq-preview-vertical">
+                        <div class="temp">${sampleWeather.temperature}°C</div>
+                        <div style="font-size: 18px; color: #333;">${sampleWeather.condition}</div>
+                        <div class="info">Humidity: ${sampleWeather.humidity}% | Wind: ${sampleWeather.wind_speed} km/h</div>
+                        <div class="info">Feels like ${sampleWeather.feels_like}°C</div>
+                    </div>`;
+                    break;
+                case 'horizontal':
+                    html = `<div class="hsq-preview-horizontal">
+                        <div class="temp">${sampleWeather.temperature}°</div>
+                        <div class="details">
+                            <strong>${sampleWeather.city}</strong><br>
+                            ${sampleWeather.condition}<br>
+                            Humidity: ${sampleWeather.humidity}% | Wind: ${sampleWeather.wind_speed} km/h
+                        </div>
+                    </div>`;
+                    break;
+                case 'table':
+                    html = `<table class="hsq-preview-table" style="width: 100%;">
+                        <tr><th>Property</th><th>Value</th></tr>
+                        <tr><td>Temperature</td><td>${sampleWeather.temperature}°C</td></tr>
+                        <tr><td>Condition</td><td>${sampleWeather.condition}</td></tr>
+                        <tr><td>Humidity</td><td>${sampleWeather.humidity}%</td></tr>
+                        <tr><td>Wind Speed</td><td>${sampleWeather.wind_speed} km/h</td></tr>
+                        <tr><td>Pressure</td><td>${sampleWeather.pressure} mb</td></tr>
+                    </table>`;
+                    break;
+                case 'tabs':
+                    html = `<div>
+                        <div class="hsq-preview-tabs">
+                            <button class="active">Now</button>
+                            <button>Tomorrow</button>
+                            <button>Weekly</button>
+                        </div>
+                        <div style="font-size: 24px; font-weight: bold; color: #1e40af;">${sampleWeather.temperature}°C</div>
+                        <div style="color: #666;">${sampleWeather.condition}</div>
+                    </div>`;
+                    break;
+                case 'accordion':
+                    html = `<div>
+                        <div style="background: #f3f4f6; padding: 10px; margin-bottom: 5px; cursor: pointer; border-radius: 4px;">
+                            <strong>▼ Current Weather</strong>
+                        </div>
+                        <div style="padding: 10px; background: #fafafa; border-radius: 4px; font-size: 13px;">
+                            <div>Temperature: ${sampleWeather.temperature}°C</div>
+                            <div>Condition: ${sampleWeather.condition}</div>
+                            <div>Humidity: ${sampleWeather.humidity}%</div>
+                        </div>
+                    </div>`;
+                    break;
+                case 'grid':
+                    html = `<div class="hsq-preview-grid">
+                        <div class="hsq-preview-grid-item">
+                            <strong>${sampleWeather.temperature}°C</strong><br>Temp
+                        </div>
+                        <div class="hsq-preview-grid-item">
+                            <strong>${sampleWeather.humidity}%</strong><br>Humidity
+                        </div>
+                        <div class="hsq-preview-grid-item">
+                            <strong>${sampleWeather.wind_speed}</strong><br>Wind
+                        </div>
+                        <div class="hsq-preview-grid-item">
+                            <strong>${sampleWeather.pressure}</strong><br>Pressure
+                        </div>
+                    </div>`;
+                    break;
+                case 'combined':
+                    html = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div><strong>${sampleWeather.temperature}°C</strong><br>${sampleWeather.condition}</div>
+                        <div><strong>Details</strong><br>Humidity: ${sampleWeather.humidity}%<br>Wind: ${sampleWeather.wind_speed} km/h</div>
+                    </div>`;
+                    break;
+                case 'weather-map':
+                    html = `<div style="text-align: center; padding: 30px; background: #e0f2fe; border-radius: 6px;">
+                        🗺️ Interactive Weather Map<br>
+                        <small>${sampleWeather.city}</small>
+                    </div>`;
+                    break;
+            }
+            preview.innerHTML = html;
+        }
+
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const tab = this.dataset.tab;
