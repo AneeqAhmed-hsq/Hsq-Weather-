@@ -258,6 +258,334 @@
     }
 }
 
+/* ===========================================
+   Horizontal Scroll Styles
+   =========================================== */
+.hsq-horizontal-scroll {
+    overflow-x: auto;
+    width: 100%;
+    position: relative;
+}
+
+.hsq-horizontal-wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 10px 5px;
+    min-width: min-content;
+}
+
+.hsq-horizontal-card {
+    min-width: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    transition: transform 0.3s;
+}
+
+.hsq-horizontal-card:hover {
+    transform: translateY(-5px);
+}
+
+.hsq-horizontal-card .hsq-city-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.hsq-horizontal-card .hsq-weather-icon {
+    font-size: 36px;
+    margin: 10px 0;
+}
+
+.hsq-horizontal-card .hsq-temperature {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* ===========================================
+   Tabs Styles
+   =========================================== */
+.hsq-tabs-container {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.hsq-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 20px;
+}
+
+.hsq-tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 8px 8px 0 0;
+    color: #64748b;
+}
+
+.hsq-tab-btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.hsq-tab-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+.hsq-tab-pane {
+    display: none;
+    animation: fadeIn 0.3s;
+}
+
+.hsq-tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ===========================================
+   Forecast Styles
+   =========================================== */
+.hsq-detailed-forecast {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.hsq-forecast-title {
+    margin: 0 0 20px 0;
+    text-align: center;
+    color: #1e293b;
+}
+
+.hsq-forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+}
+
+.hsq-forecast-day {
+    text-align: center;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: transform 0.3s;
+}
+
+.hsq-forecast-day:hover {
+    transform: translateY(-3px);
+    background: #f1f5f9;
+}
+
+.hsq-forecast-date {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.hsq-forecast-icon {
+    font-size: 32px;
+    margin: 10px 0;
+}
+
+.hsq-forecast-temp {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.hsq-max-temp {
+    color: #ef4444;
+    font-weight: bold;
+}
+
+.hsq-min-temp {
+    color: #3b82f6;
+}
+
+/* ===========================================
+   Air Quality Styles
+   =========================================== */
+.hsq-air-quality {
+    margin: 20px 0;
+}
+
+.hsq-aqi-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    border-left: 4px solid;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.hsq-aqi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.hsq-aqi-title {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.hsq-aqi-value {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.hsq-aqi-level {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.hsq-aqi-details {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.hsq-aqi-item {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.hsq-aqi-item strong {
+    color: #1e293b;
+}
+
+/* ===========================================
+   Sun & Moon Styles
+   =========================================== */
+.hsq-sun-moon {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.hsq-sun-card,
+.hsq-moon-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.hsq-sun-icon,
+.hsq-moon-icon {
+    font-size: 48px;
+}
+
+.hsq-sun-times,
+.hsq-moon-times {
+    flex: 1;
+}
+
+.hsq-sun-times div,
+.hsq-moon-times div {
+    margin: 5px 0;
+    color: #64748b;
+}
+
+.hsq-sun-times strong,
+.hsq-moon-times strong {
+    color: #1e293b;
+}
+
+/* ===========================================
+   Radar Map Styles
+   =========================================== */
+.hsq-radar-map {
+    margin: 20px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ===========================================
+   Dark Theme Support for Blocks
+   =========================================== */
+.hsq-theme-dark .hsq-detailed-forecast,
+.hsq-theme-dark .hsq-aqi-card,
+.hsq-theme-dark .hsq-sun-card,
+.hsq-theme-dark .hsq-moon-card {
+    background: #1e1e2e;
+    color: #eee;
+}
+
+.hsq-theme-dark .hsq-forecast-title,
+.hsq-theme-dark .hsq-aqi-title,
+.hsq-theme-dark .hsq-aqi-item strong {
+    color: #eee;
+}
+
+.hsq-theme-dark .hsq-forecast-day {
+    background: #2a2a3a;
+}
+
+.hsq-theme-dark .hsq-forecast-date {
+    color: #eee;
+}
+
+.hsq-theme-dark .hsq-aqi-item {
+    color: #94a3b8;
+}
+
+.hsq-theme-dark .hsq-tab-btn {
+    color: #94a3b8;
+}
+
+.hsq-theme-dark .hsq-tab-btn:hover {
+    background: #2a2a3a;
+    color: #eee;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hsq-forecast-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hsq-sun-moon {
+        grid-template-columns: 1fr;
+    }
+    
+    .hsq-tab-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .hsq-horizontal-card {
+        min-width: 160px;
+    }
+}
+
 /* Print Styles */
 @media print {
     .hsq-weather-controls {

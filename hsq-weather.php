@@ -143,3 +143,76 @@ function hsq_weather_enqueue_admin($hook) {
         ));
     }
 }
+
+/**
+ * Register Gutenberg Blocks
+ */
+function hsq_weather_register_blocks() {
+    // Check if block editor is available
+    if (!function_exists('register_block_type')) {
+        return;
+    }
+    
+    require_once HSQ_WEATHER_PLUGIN_DIR . 'includes/class-weather-blocks.php';
+    new HSQ_Weather_Blocks();
+}
+add_action('init', 'hsq_weather_register_blocks');
+
+/**
+ * Enqueue block assets
+ */
+function hsq_weather_enqueue_block_assets() {
+    wp_enqueue_style(
+        'hsq-weather-blocks',
+        HSQ_WEATHER_PLUGIN_URL . 'public/css/public-style.css',
+        array(),
+        HSQ_WEATHER_VERSION
+    );
+}
+add_action('enqueue_block_assets', 'hsq_weather_enqueue_block_assets');
+
+/**
+ * AJAX handler for block demo
+ */
+function hsq_weather_block_demo_ajax() {
+    check_ajax_referer('hsq_weather_block_demo', 'nonce');
+    
+    $block = sanitize_text_field($_POST['block']);
+    $blocks = new HSQ_Weather_Blocks();
+    
+    switch ($block) {
+        case 'weather-card':
+            echo $blocks->render_weather_card_block(array('city' => 'New York', 'showWind' => true, 'showHumidity' => true));
+            break;
+        case 'weather-grid':
+            echo $blocks->render_weather_grid_block(array('columns' => 3));
+            break;
+        case 'weather-horizontal':
+            echo $blocks->render_weather_horizontal_block(array());
+            break;
+        case 'weather-tabs':
+            echo $blocks->render_weather_tabs_block(array());
+            break;
+        case 'radar-map':
+            echo $blocks->render_radar_map_block(array('latitude' => '40.7128', 'longitude' => '-74.0060', 'zoom' => 5));
+            break;
+        case 'detailed-forecast':
+            echo $blocks->render_detailed_forecast_block(array('city' => 'New York', 'days' => 5));
+            break;
+        case 'air-quality':
+            echo $blocks->render_air_quality_block(array('city' => 'New York'));
+            break;
+        case 'sun-moon':
+            echo $blocks->render_sun_moon_block(array('city' => 'New York'));
+            break;
+        case 'shortcode':
+            echo $blocks->render_shortcode_block(array('shortcode' => '[hsq_weather]'));
+            break;
+        default:
+            echo '<p>Demo not available for this block yet.</p>';
+    }
+    
+    wp_die();
+}
+add_action('wp_ajax_hsq_weather_block_demo', 'hsq_weather_block_demo_ajax');
+add_action('wp_ajax_nopriv_hsq_weather_block_demo', 'hsq_weather_block_demo_ajax');
