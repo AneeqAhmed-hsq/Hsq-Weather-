@@ -155,136 +155,122 @@ class HSQ_Weather_Admin_Settings {
      * Render settings page
      */
     public function render_settings_page() {
+        $this->render_admin_header('settings');
         $settings = get_option('hsq_weather_settings');
         $cities = isset($settings['cities']) ? $settings['cities'] : array();
+        $active_section = isset($_GET['section']) ? sanitize_text_field($_GET['section']) : 'advanced-controls';
         ?>
+        <style>
+            .hsq-settings-layout { display: grid; grid-template-columns: 300px 1fr; gap: 24px; margin: 24px 0; }
+            .hsq-settings-sidebar { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 0; overflow: hidden; height: fit-content; }
+            .hsq-settings-sidebar-item { padding: 16px 20px; border-bottom: 1px solid #eee; cursor: pointer; color: #374151; font-weight: 500; transition: all 0.2s ease; }
+            .hsq-settings-sidebar-item:last-child { border-bottom: none; }
+            .hsq-settings-sidebar-item:hover { background: #f3f4f6; }
+            .hsq-settings-sidebar-item.active { background: #f3f4f6; color: #ea580c; border-left: 4px solid #ea580c; padding-left: 16px; }
+            .hsq-settings-sidebar-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; padding: 12px 20px; font-weight: 700; }
+            .hsq-settings-content { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; }
+            .hsq-settings-content h2 { margin-top: 0; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+            .hsq-section { display: none; }
+            .hsq-section.active { display: block; }
+            @media (max-width: 768px) { .hsq-settings-layout { grid-template-columns: 1fr; } .hsq-settings-sidebar { display: flex; gap: 0; margin-bottom: 20px; } .hsq-settings-sidebar-item { flex: 1; padding: 12px; text-align: center; border: 1px solid #e5e7eb; } }
+        </style>
         <div class="wrap hsq-weather-settings">
-            <h1><?php _e('HSQ Weather Settings', 'hsq-weather'); ?></h1>
-            
-            <div class="hsq-settings-container">
-                <div class="hsq-settings-main">
+            <div class="hsq-settings-layout">
+                <!-- Sidebar Navigation -->
+                <div class="hsq-settings-sidebar">
+                    <div class="hsq-settings-sidebar-label"><?php _e('Settings', 'hsq-weather'); ?></div>
+                    <div class="hsq-settings-sidebar-item<?php echo $active_section === 'weather-api-key' ? ' active' : ''; ?>" onclick="location.href='?page=hsq-weather-settings&section=weather-api-key'">☁️ <?php _e('Weather API Key', 'hsq-weather'); ?></div>
+                    <div class="hsq-settings-sidebar-item<?php echo $active_section === 'advanced-controls' ? ' active' : ''; ?>" onclick="location.href='?page=hsq-weather-settings&section=advanced-controls'">⚙️ <?php _e('Advanced Controls', 'hsq-weather'); ?></div>
+                    <div class="hsq-settings-sidebar-item<?php echo $active_section === 'custom-css' ? ' active' : ''; ?>" onclick="location.href='?page=hsq-weather-settings&section=custom-css'"><?php _e('Additional CSS & JS', 'hsq-weather'); ?></div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="hsq-settings-content">
                     <form method="post" action="options.php">
                         <?php settings_fields('hsq_weather_settings_group'); ?>
-                        
-                        <!-- Cities Management -->
-                        <div class="hsq-section">
-                            <h2><?php _e('Manage Cities', 'hsq-weather'); ?></h2>
-                            
-                            <div class="hsq-add-city">
-                                <input type="text" id="hsq-city-search" placeholder="<?php _e('Search city name...', 'hsq-weather'); ?>" autocomplete="off">
-                                <div id="hsq-search-results" style="display:none;"></div>
-                                <button type="button" id="hsq-add-city-btn" class="button button-primary"><?php _e('Add City', 'hsq-weather'); ?></button>
-                            </div>
-                            
-                            <div class="hsq-cities-list">
-                                <h3><?php _e('Cities (Drag to reorder)', 'hsq-weather'); ?></h3>
-                                <ul id="hsq-cities-sortable">
-                                    <?php foreach ($cities as $index => $city): ?>
-                                        <li data-index="<?php echo $index; ?>" data-lat="<?php echo esc_attr($city['lat']); ?>" data-lon="<?php echo esc_attr($city['lon']); ?>">
-                                            <span class="drag-handle">⋮⋮</span>
-                                            <span class="city-name"><?php echo esc_html($city['name']); ?></span>
-                                            <input type="hidden" name="hsq_weather_settings[cities][<?php echo $index; ?>][name]" value="<?php echo esc_attr($city['name']); ?>">
-                                            <input type="hidden" name="hsq_weather_settings[cities][<?php echo $index; ?>][lat]" value="<?php echo esc_attr($city['lat']); ?>">
-                                            <input type="hidden" name="hsq_weather_settings[cities][<?php echo $index; ?>][lon]" value="<?php echo esc_attr($city['lon']); ?>">
-                                            <button type="button" class="hsq-delete-city button button-small"><?php _e('Delete', 'hsq-weather'); ?></button>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <!-- Display Settings -->
-                        <div class="hsq-section">
-                            <h2><?php _e('Display Settings', 'hsq-weather'); ?></h2>
-                            
+
+                        <!-- Weather API Key Section -->
+                        <div class="hsq-section<?php echo $active_section === 'weather-api-key' ? ' active' : ''; ?>">
+                            <h2><?php _e('Weather API Key', 'hsq-weather'); ?></h2>
                             <table class="form-table">
                                 <tr>
-                                    <th scope="row"><?php _e('Default Columns', 'hsq-weather'); ?></th>
+                                    <th scope="row"><?php _e('API Provider', 'hsq-weather'); ?></th>
                                     <td>
-                                        <select name="hsq_weather_settings[columns]">
-                                            <option value="2" <?php selected($settings['columns'], 2); ?>>2 Columns</option>
-                                            <option value="3" <?php selected($settings['columns'], 3); ?>>3 Columns</option>
-                                            <option value="4" <?php selected($settings['columns'], 4); ?>>4 Columns</option>
-                                        </select>
+                                        <p><strong><?php _e('Open-Meteo (Recommended)', 'hsq-weather'); ?></strong></p>
+                                        <p class="description"><?php _e('No API key needed. Free weather data with no registration required.', 'hsq-weather'); ?></p>
                                     </td>
                                 </tr>
-                                
+                            </table>
+                        </div>
+
+                        <!-- Advanced Controls Section -->
+                        <div class="hsq-section<?php echo $active_section === 'advanced-controls' ? ' active' : ''; ?>">
+                            <h2><?php _e('Advanced Controls', 'hsq-weather'); ?></h2>
+                            <table class="form-table">
                                 <tr>
-                                    <th scope="row"><?php _e('Default Theme', 'hsq-weather'); ?></th>
-                                    <td>
-                                        <select name="hsq_weather_settings[theme]">
-                                            <option value="light" <?php selected($settings['theme'], 'light'); ?>>Light</option>
-                                            <option value="dark" <?php selected($settings['theme'], 'dark'); ?>>Dark</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <th scope="row"><?php _e('Refresh Time', 'hsq-weather'); ?></th>
-                                    <td>
-                                        <select name="hsq_weather_settings[refresh_time]">
-                                            <option value="300" <?php selected($settings['refresh_time'], 300); ?>>5 minutes</option>
-                                            <option value="900" <?php selected($settings['refresh_time'], 900); ?>>15 minutes</option>
-                                            <option value="1800" <?php selected($settings['refresh_time'], 1800); ?>>30 minutes</option>
-                                            <option value="3600" <?php selected($settings['refresh_time'], 3600); ?>>1 hour</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <th scope="row"><?php _e('Temperature Unit', 'hsq-weather'); ?></th>
-                                    <td>
-                                        <select name="hsq_weather_settings[unit]">
-                                            <option value="celsius" <?php selected($settings['unit'], 'celsius'); ?>>Celsius (°C)</option>
-                                            <option value="fahrenheit" <?php selected($settings['unit'], 'fahrenheit'); ?>>Fahrenheit (°F)</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <th scope="row"><?php _e('Show Weather Details', 'hsq-weather'); ?></th>
+                                    <th scope="row"><?php _e('Clean-up Data on Deletion', 'hsq-weather'); ?></th>
                                     <td>
                                         <label>
-                                            <input type="checkbox" name="hsq_weather_settings[show_wind]" value="1" <?php checked($settings['show_wind'], 1); ?>>
-                                            <?php _e('Show Wind Speed', 'hsq-weather'); ?>
-                                        </label><br>
+                                            <input type="checkbox" name="hsq_weather_settings[cleanup_on_delete]" value="1" <?php checked($settings['cleanup_on_delete'], 1); ?>>
+                                            <?php _e('Remove all plugin data when uninstalled', 'hsq-weather'); ?>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><?php _e('Skip Cache for Weather Update', 'hsq-weather'); ?></th>
+                                    <td>
                                         <label>
-                                            <input type="checkbox" name="hsq_weather_settings[show_humidity]" value="1" <?php checked($settings['show_humidity'], 1); ?>>
-                                            <?php _e('Show Humidity', 'hsq-weather'); ?>
+                                            <input type="checkbox" name="hsq_weather_settings[skip_cache]" value="1" <?php checked($settings['skip_cache'], 1); ?>>
+                                            <?php _e('Always fetch fresh weather data', 'hsq-weather'); ?>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><?php _e('Cache', 'hsq-weather'); ?></th>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" name="hsq_weather_settings[enable_cache]" value="1" <?php checked($settings['enable_cache'], 1); ?>>
+                                            <?php _e('Use cached weather data', 'hsq-weather'); ?>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><?php _e('Purge Cache', 'hsq-weather'); ?></th>
+                                    <td>
+                                        <button type="button" class="button button-primary" id="hsq-purge-cache"><?php _e('Delete', 'hsq-weather'); ?></button>
+                                        <p class="description"><?php _e('Clear all cached weather data', 'hsq-weather'); ?></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><?php _e('Contribute to Location Weather', 'hsq-weather'); ?></th>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" name="hsq_weather_settings[contribute_data]" value="1" <?php checked($settings['contribute_data'], 1); ?>>
+                                            <?php _e('We collect non-sensitive data to fix bugs faster, make smarter decisions, and build features that truly matter to you. ', 'hsq-weather'); ?><a href="#" target="_blank"><?php _e('See what we collect', 'hsq-weather'); ?></a>
                                         </label>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        
-                        <!-- Custom CSS -->
-                        <div class="hsq-section">
-                            <h2><?php _e('Custom CSS', 'hsq-weather'); ?></h2>
+
+                        <!-- Custom CSS & JS Section -->
+                        <div class="hsq-section<?php echo $active_section === 'custom-css' ? ' active' : ''; ?>">
+                            <h2><?php _e('Additional CSS & JS', 'hsq-weather'); ?></h2>
+                            
+                            <h3><?php _e('Custom CSS', 'hsq-weather'); ?></h3>
                             <textarea name="hsq_weather_settings[custom_css]" rows="10" cols="50" class="large-text code"><?php echo esc_textarea($settings['custom_css']); ?></textarea>
                             <p class="description"><?php _e('Add your custom CSS to style the weather cards.', 'hsq-weather'); ?></p>
+
+                            <h3 style="margin-top: 30px;"><?php _e('Custom JavaScript', 'hsq-weather'); ?></h3>
+                            <textarea name="hsq_weather_settings[custom_js]" rows="10" cols="50" class="large-text code"><?php echo esc_textarea($settings['custom_js']); ?></textarea>
+                            <p class="description"><?php _e('Add your custom JavaScript. Note: Only use vanilla JS.', 'hsq-weather'); ?></p>
                         </div>
-                        
-                        <?php submit_button(); ?>
+
+                        <div style="margin-top: 30px;">
+                            <?php submit_button(__('Save Changes', 'hsq-weather')); ?>
+                            <button type="button" class="button" onclick="location.href='?page=hsq-weather-settings'" style="margin-left: 10px;"><?php _e('Reset', 'hsq-weather'); ?></button>
+                        </div>
                     </form>
-                </div>
-                
-                <div class="hsq-settings-sidebar">
-                    <div class="hsq-box">
-                        <h3><?php _e('Shortcode Usage', 'hsq-weather'); ?></h3>
-                        <code>[hsq_weather]</code>
-                        <p><?php _e('Default 3 columns', 'hsq-weather'); ?></p>
-                        <code>[hsq_weather columns="2"]</code>
-                        <p><?php _e('2 columns', 'hsq-weather'); ?></p>
-                        <code>[hsq_weather columns="4"]</code>
-                        <p><?php _e('4 columns', 'hsq-weather'); ?></p>
-                    </div>
-                    
-                    <div class="hsq-box">
-                        <h3><?php _e('Information', 'hsq-weather'); ?></h3>
-                        <p><?php _e('Weather data provided by', 'hsq-weather'); ?> <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a></p>
-                        <p><?php _e('No API key required!', 'hsq-weather'); ?></p>
-                        <p><?php _e('Version:', 'hsq-weather'); ?> <?php echo HSQ_WEATHER_VERSION; ?></p>
-                    </div>
                 </div>
             </div>
         </div>
