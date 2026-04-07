@@ -706,7 +706,8 @@ class HSQ_Weather_Admin_Settings {
                     <h2><?php _e('Choose Layout Template', 'hsq-weather'); ?></h2>
                     <div class="hsq-layout-grid">
                         <?php foreach ($layouts as $key => $layout): ?>
-                            <div class="hsq-layout-card" data-layout="<?php echo esc_attr($key); ?>" onclick="selectLayout('<?php echo esc_attr($key); ?>')">
+                            <?php $active_class = $key === 'horizontal' ? ' active' : ''; ?>
+                            <div class="hsq-layout-card<?php echo $active_class; ?>" data-layout="<?php echo esc_attr($key); ?>" onclick="selectLayout('<?php echo esc_attr($key); ?>')">
                                 <span class="icon"><?php echo $layout['icon']; ?></span>
                                 <div class="name"><?php echo esc_html($layout['name']); ?></div>
                                 <div class="desc"><?php echo esc_html($layout['desc']); ?></div>
@@ -816,12 +817,15 @@ class HSQ_Weather_Admin_Settings {
 
         <script>
         const sampleWeather = <?php echo json_encode($sample_weather); ?>;
-        let selectedLayout = null;
+        let selectedLayout = 'horizontal';
 
         function selectLayout(layout) {
             selectedLayout = layout;
             document.querySelectorAll('.hsq-layout-card').forEach(card => card.classList.remove('active'));
-            document.querySelector('[data-layout="' + layout + '"]').classList.add('active');
+            const selectedCard = document.querySelector('[data-layout="' + layout + '"]');
+            if (selectedCard) {
+                selectedCard.classList.add('active');
+            }
             updatePreview();
         }
 
@@ -840,12 +844,18 @@ class HSQ_Weather_Admin_Settings {
                     </div>`;
                     break;
                 case 'horizontal':
-                    html = `<div class="hsq-preview-horizontal">
-                        <div class="temp">${sampleWeather.temperature}°</div>
-                        <div class="details">
-                            <strong>${sampleWeather.city}</strong><br>
-                            ${sampleWeather.condition}<br>
-                            Humidity: ${sampleWeather.humidity}% | Wind: ${sampleWeather.wind_speed} km/h
+                    html = `<div class="hsq-preview-horizontal" style="background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 18px; width: 100%;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">${sampleWeather.city}</div>
+                            <div style="font-size: 12px; color: #9ca3af; margin-bottom: 10px;">6:29 pm, Apr 7, 2026</div>
+                            <div style="font-size: 42px; font-weight: 700; color: #ef4444;">${sampleWeather.temperature}°C</div>
+                            <div style="font-size: 14px; color: #374151; margin-top: 6px;">${sampleWeather.condition}</div>
+                        </div>
+                        <div style="min-width: 160px; text-align: right; font-size: 13px; color: #4b5563;">
+                            <div style="margin-bottom: 8px;">Wind: ${sampleWeather.wind_speed} km/h</div>
+                            <div style="margin-bottom: 8px;">Humidity: ${sampleWeather.humidity}%</div>
+                            <div style="margin-bottom: 8px;">Pressure: ${sampleWeather.pressure} mb</div>
+                            <div>Visibility: ${sampleWeather.visibility} km</div>
                         </div>
                     </div>`;
                     break;
@@ -922,6 +932,11 @@ class HSQ_Weather_Admin_Settings {
                 this.classList.add('active');
                 document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
             });
+        });
+
+        // Initialize default horizontal preview
+        document.addEventListener('DOMContentLoaded', function() {
+            selectLayout('horizontal');
         });
         </script>
         <?php
