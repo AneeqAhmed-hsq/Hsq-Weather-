@@ -76,6 +76,14 @@ class HSQ_Weather_Admin_Settings {
         );
         add_submenu_page(
             'hsq-weather',
+            __('Add New Weather', 'hsq-weather'),
+            __('Add New Weather', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-add-new',
+            array($this, 'render_add_new_weather_page')
+        );
+        add_submenu_page(
+            'hsq-weather',
             __('Add New Weather Tools', 'hsq-weather'),
             __('Add New Weather Tools', 'hsq-weather'),
             'manage_options',
@@ -557,7 +565,7 @@ class HSQ_Weather_Admin_Settings {
         <div class="wrap hsq-manage-weather">
             <div class="hsq-manage-header">
                 <h1><?php _e('Manage Weather', 'hsq-weather'); ?></h1>
-                <a href="#" class="button button-primary"><?php _e('Add New Weather', 'hsq-weather'); ?></a>
+                <a href="?page=hsq-weather-add-new" class="button button-primary"><?php _e('Add New Weather', 'hsq-weather'); ?></a>
             </div>
 
             <div class="hsq-filter-tabs">
@@ -604,9 +612,196 @@ class HSQ_Weather_Admin_Settings {
     }
 
     /**
-     * Render Tools Page
+     * Render Add New Weather Page
      */
-    public function render_tools_page() {
+    public function render_add_new_weather_page() {
+        $layouts = array(
+            'vertical-card' => array('icon' => '📋', 'name' => 'Vertical Card', 'desc' => 'Clean vertical layout'),
+            'horizontal' => array('icon' => '➡️', 'name' => 'Horizontal', 'desc' => 'Side-by-side layout'),
+            'table' => array('icon' => '📊', 'name' => 'Table', 'desc' => 'Table format'),
+            'tabs' => array('icon' => '📑', 'name' => 'Tabs', 'desc' => 'Tabbed view'),
+            'accordion' => array('icon' => '📁', 'name' => 'Accordion', 'desc' => 'Collapsible items'),
+            'grid' => array('icon' => '🔲', 'name' => 'Grid', 'desc' => 'Grid layout'),
+            'combined' => array('icon' => '🔗', 'name' => 'Combined', 'desc' => 'Mixed layout'),
+            'weather-map' => array('icon' => '🗺️', 'name' => 'Weather Map', 'desc' => 'Interactive map')
+        );
+        ?>
+        <style>
+            .hsq-add-weather-header { background: linear-gradient(135deg, #fb923c 0%, #f97316 100%); color: white; padding: 24px; border-radius: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+            .hsq-add-weather-header h1 { margin: 0; font-size: 28px; }
+            .hsq-add-weather-header .badge { background: rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+            .hsq-form-section { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+            .hsq-form-section h2 { margin-top: 0; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; font-size: 18px; }
+            .hsq-layout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 20px 0; }
+            .hsq-layout-card { border: 2px solid #e5e7eb; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+            .hsq-layout-card:hover { border-color: #fb923c; background: #fff9f5; }
+            .hsq-layout-card.active { border-color: #fb923c; background: #fff9f5; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1); }
+            .hsq-layout-card .icon { font-size: 32px; margin-bottom: 10px; display: block; }
+            .hsq-layout-card .name { font-weight: 600; font-size: 14px; color: #111827; }
+            .hsq-layout-card .desc { font-size: 12px; color: #6b7280; margin-top: 5px; }
+            .hsq-form-group { margin-bottom: 20px; }
+            .hsq-form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #111827; }
+            .hsq-form-group input[type="text"], .hsq-form-group select { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+            .hsq-form-group input:focus, .hsq-form-group select:focus { outline: none; border-color: #fb923c; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1); }
+            .hsq-tabs { display: flex; gap: 0; border-bottom: 1px solid #e5e7eb; margin: 0 -24px 24px -24px; }
+            .hsq-tabs button { flex: 1; padding: 12px; border: none; background: transparent; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; font-weight: 600; transition: all 0.2s ease; }
+            .hsq-tabs button.active { color: #fb923c; border-bottom-color: #fb923c; }
+            .hsq-tab-content { display: none; }
+            .hsq-tab-content.active { display: block; }
+            .hsq-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .hsq-full-width { grid-column: 1 / -1; }
+            .hsq-save-actions { display: flex; gap: 10px; margin-top: 30px; }
+            @media (max-width: 768px) { .hsq-two-col { grid-template-columns: 1fr; } }
+        </style>
+        <div class="wrap">
+            <div class="hsq-add-weather-header">
+                <div>
+                    <h1>☁️ <?php _e('Add New Weather', 'hsq-weather'); ?></h1>
+                </div>
+                <div class="badge"><?php _e('ALL FEATURES FREE', 'hsq-weather'); ?></div>
+            </div>
+
+            <form method="post" action="">
+                <!-- Title Section -->
+                <div class="hsq-form-section">
+                    <div class="hsq-form-group">
+                        <label><?php _e('Add Title', 'hsq-weather'); ?></label>
+                        <input type="text" name="weather_title" placeholder="<?php _e('Enter weather template name', 'hsq-weather'); ?>">
+                    </div>
+                </div>
+
+                <!-- Layout Templates -->
+                <div class="hsq-form-section">
+                    <h2><?php _e('Choose Layout Template', 'hsq-weather'); ?></h2>
+                    <div class="hsq-layout-grid">
+                        <?php foreach ($layouts as $key => $layout): ?>
+                            <div class="hsq-layout-card" data-layout="<?php echo esc_attr($key); ?>">
+                                <span class="icon"><?php echo $layout['icon']; ?></span>
+                                <div class="name"><?php echo esc_html($layout['name']); ?></div>
+                                <div class="desc"><?php echo esc_html($layout['desc']); ?></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <p class="description"><?php _e('To create your catch Weather Layouts with Graph Charts and access to advanced customizations, Upgrade to Pro', 'hsq-weather'); ?></p>
+                </div>
+
+                <!-- Display Settings Tabs -->
+                <div class="hsq-form-section">
+                    <div class="hsq-tabs">
+                        <button type="button" class="tab-btn active" data-tab="my-items"><?php _e('My Items', 'hsq-weather'); ?></button>
+                        <button type="button" class="tab-btn" data-tab="pro-id"><?php _e('Pro ID', 'hsq-weather'); ?></button>
+                        <button type="button" class="tab-btn" data-tab="craft"><?php _e('Craft', 'hsq-weather'); ?></button>
+                        <button type="button" class="tab-btn" data-tab="customization"><?php _e('Customization', 'hsq-weather'); ?></button>
+                    </div>
+
+                    <!-- My Items Tab -->
+                    <div class="hsq-tab-content active" data-tab="my-items">
+                        <h3><?php _e('Display Weather For Specific Location', 'hsq-weather'); ?></h3>
+                        <div class="hsq-two-col">
+                            <div class="hsq-form-group">
+                                <label><?php _e('City Name', 'hsq-weather'); ?></label>
+                                <input type="text" placeholder="<?php _e('London, GB', 'hsq-weather'); ?>">
+                                <small><?php _e('Write your city name and country code only', 'hsq-weather'); ?></small>
+                            </div>
+                            <div class="hsq-form-group">
+                                <label><?php _e('Custom Location Name', 'hsq-weather'); ?></label>
+                                <input type="text" placeholder="">
+                            </div>
+                            <div class="hsq-form-group">
+                                <label><input type="checkbox"> <?php _e('Location From Custom Fields', 'hsq-weather'); ?></label>
+                            </div>
+                            <div class="hsq-form-group">
+                                <label><?php _e('Display Weather For Visitors Location (Auto Detect)', 'hsq-weather'); ?></label>
+                                <button type="button" class="button"><?php _e('Select Location', 'hsq-weather'); ?></button>
+                            </div>
+                            <div class="hsq-form-group">
+                                <label><?php _e('Custom Weather Search', 'hsq-weather'); ?></label>
+                                <button type="button" class="button"><?php _e('Search', 'hsq-weather'); ?></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pro ID Tab -->
+                    <div class="hsq-tab-content" data-tab="pro-id">
+                        <p><?php _e('Pro features available in paid version', 'hsq-weather'); ?></p>
+                    </div>
+
+                    <!-- Craft Tab -->
+                    <div class="hsq-tab-content" data-tab="craft">
+                        <p><?php _e('Craft customization options', 'hsq-weather'); ?></p>
+                    </div>
+
+                    <!-- Customization Tab -->
+                    <div class="hsq-tab-content" data-tab="customization">
+                        <p><?php _e('Customization options', 'hsq-weather'); ?></p>
+                    </div>
+                </div>
+
+                <!-- Measurement Units -->
+                <div class="hsq-form-section">
+                    <h2><?php _e('Measurement Units', 'hsq-weather'); ?></h2>
+                    <div class="hsq-two-col">
+                        <div class="hsq-form-group">
+                            <label><?php _e('Display Temperature Unit', 'hsq-weather'); ?></label>
+                            <select>
+                                <option><?php _e('Celsius (°C)', 'hsq-weather'); ?></option>
+                                <option><?php _e('Fahrenheit (°F)', 'hsq-weather'); ?></option>
+                            </select>
+                        </div>
+                        <div class="hsq-form-group">
+                            <label><?php _e('Pressure Unit', 'hsq-weather'); ?></label>
+                            <select>
+                                <option><?php _e('Millibar (mb)', 'hsq-weather'); ?></option>
+                            </select>
+                        </div>
+                        <div class="hsq-form-group">
+                            <label><?php _e('Precipitation Unit', 'hsq-weather'); ?></label>
+                            <select>
+                                <option><?php _e('Millimeter (mm/m)', 'hsq-weather'); ?></option>
+                            </select>
+                        </div>
+                        <div class="hsq-form-group">
+                            <label><?php _e('Wind Speed Unit', 'hsq-weather'); ?></label>
+                            <select>
+                                <option><?php _e('Mhu per hour (mph)', 'hsq-weather'); ?></option>
+                            </select>
+                        </div>
+                        <div class="hsq-form-group">
+                            <label><?php _e('Visibility Unit', 'hsq-weather'); ?></label>
+                            <select>
+                                <option><?php _e('Kilometers', 'hsq-weather'); ?></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Actions -->
+                <div class="hsq-save-actions">
+                    <button type="submit" class="button button-primary button-hero"><?php _e('✓ SAVE WEATHER', 'hsq-weather'); ?></button>
+                    <button type="button" class="button" onclick="window.history.back();"><?php _e('Cancel', 'hsq-weather'); ?></button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+        document.querySelectorAll('.hsq-layout-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.hsq-layout-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.hsq-tab-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+            });
+        });
+        </script>
+        <?php
+    }
         ?>
         <div class="wrap hsq-tools-page">
             <h1><?php _e('Add New Weather Tools', 'hsq-weather'); ?></h1>
