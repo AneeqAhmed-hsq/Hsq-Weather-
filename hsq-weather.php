@@ -15,6 +15,32 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Debug helper for plugin load/runtime failures
+if (!function_exists('hsq_weather_debug_log')) {
+    function hsq_weather_debug_log($message) {
+        $log_file = defined('WP_CONTENT_DIR') ? WP_CONTENT_DIR . '/hsq-weather-debug.log' : dirname(__FILE__) . '/hsq-weather-debug.log';
+        if (is_array($message) || is_object($message)) {
+            $message = print_r($message, true);
+        }
+        $timestamp = date('Y-m-d H:i:s');
+        error_log("[$timestamp] HSQ Weather: $message\n", 3, $log_file);
+    }
+
+    function hsq_weather_shutdown_handler() {
+        $error = error_get_last();
+        if ($error !== null) {
+            hsq_weather_debug_log('Shutdown error: ' . print_r($error, true));
+        }
+    }
+
+    register_shutdown_function('hsq_weather_shutdown_handler');
+
+    set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        hsq_weather_debug_log("PHP error [$errno] $errstr in $errfile on line $errline");
+        return false;
+    });
+}
+
 // Define plugin constants
 define('HSQ_WEATHER_VERSION', '1.0.0');
 define('HSQ_WEATHER_PLUGIN_DIR', plugin_dir_path(__FILE__));
