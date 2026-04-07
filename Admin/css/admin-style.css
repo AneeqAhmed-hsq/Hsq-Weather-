@@ -354,36 +354,268 @@
     margin: 10px;
 }
 
-/* Blocks Page */
+/* ===========================================
+   Blocks Page Styles
+   =========================================== */
+
+.hsq-blocks-page {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.hsq-blocks-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    color: white;
+}
+
+.hsq-blocks-header h1 {
+    color: white;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.hsq-blocks-header p {
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+/* Blocks Grid */
 .hsq-blocks-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin: 30px 0;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
-.hsq-block-card {
+/* Block Item */
+.hsq-block-item {
     background: #fff;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 25px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #eef2f6;
 }
 
-.block-icon {
+.hsq-block-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    border-color: #667eea;
+}
+
+/* Pro Block Style */
+.hsq-pro-block {
+    background: linear-gradient(135deg, #fff 0%, #fff9e6 100%);
+    border-left: 4px solid #ff9800;
+}
+
+/* Block Icon */
+.hsq-block-icon {
     font-size: 48px;
-    margin-bottom: 15px;
-}
-
-.coming-soon {
-    color: #999;
-    font-style: italic;
-    margin-top: 10px;
-}
-
-.hsq-features-link {
+    min-width: 60px;
     text-align: center;
-    margin-top: 30px;
+}
+
+/* Block Content */
+.hsq-block-content {
+    flex: 1;
+}
+
+.hsq-block-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hsq-pro-badge {
+    background: #ff9800;
+    color: white;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.hsq-block-desc {
+    color: #64748b;
+    font-size: 14px;
+    margin: 0 0 15px 0;
+    line-height: 1.5;
+}
+
+/* Block Actions Buttons */
+.hsq-block-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.hsq-block-btn {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.hsq-docs-btn {
+    background: #f1f5f9;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+}
+
+.hsq-docs-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.hsq-demo-btn {
+    background: #667eea;
+    color: white;
+    border: 1px solid #667eea;
+}
+
+.hsq-demo-btn:hover {
+    background: #5a67d8;
+    color: white;
+}
+
+/* Pro Block Buttons */
+.hsq-pro-block .hsq-demo-btn {
+    background: #ff9800;
+    border-color: #ff9800;
+}
+
+.hsq-pro-block .hsq-demo-btn:hover {
+    background: #f57c00;
+}
+
+/* Footer Button */
+.hsq-blocks-footer {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.hsq-full-features-btn {
+    display: inline-block;
+    background: #1e293b;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.hsq-full-features-btn:hover {
+    background: #0f172a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    color: white;
+}
+
+/* Support Section */
+.hsq-blocks-support {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.hsq-support-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 20px;
+    padding: 35px;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hsq-support-card h3 {
+    font-size: 24px;
+    margin: 0 0 12px 0;
+    color: #1e293b;
+}
+
+.hsq-support-card p {
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+.hsq-support-card .button {
+    margin: 0 8px;
+    padding: 10px 24px;
+    height: auto;
+    font-size: 14px;
+}
+
+.hsq-support-card .button-primary {
+    background: #667eea;
+    border-color: #667eea;
+}
+
+.hsq-support-card .button-primary:hover {
+    background: #5a67d8;
+    border-color: #5a67d8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hsq-blocks-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hsq-block-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hsq-block-actions {
+        justify-content: center;
+    }
+    
+    .hsq-block-title {
+        justify-content: center;
+    }
+    
+    .hsq-blocks-header h1 {
+        font-size: 28px;
+    }
+    
+    .hsq-support-card {
+        padding: 25px;
+    }
+    
+    .hsq-support-card .button {
+        margin: 5px;
+        display: inline-block;
+    }
+}
+
+@media (max-width: 480px) {
+    .hsq-block-actions {
+        flex-direction: column;
+    }
+    
+    .hsq-block-btn {
+        text-align: center;
+    }
 }
 
 /* Templates Page */
