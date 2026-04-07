@@ -374,6 +374,24 @@ class HSQ_Weather_Admin_Settings {
      * Render Blocks Page - Professional Layout
      */
     public function render_blocks_page() {
+        $blocks = array(
+            array('title' => 'Weather Card', 'icon' => '🌤️', 'description' => 'Display single city weather in beautiful card layout', 'pro' => false, 'slug' => 'weather-card'),
+            array('title' => 'Weather Horizontal', 'icon' => '🟦', 'description' => 'Display horizontal weather cards in a slider', 'pro' => false, 'slug' => 'weather-horizontal'),
+            array('title' => 'AQI - Minimal Card', 'icon' => 'AQI', 'description' => 'Display air quality index with a compact card', 'pro' => false, 'slug' => 'air-quality'),
+            array('title' => 'Weather Grid', 'icon' => '🌍', 'description' => 'Display weather in a responsive grid layout', 'pro' => false, 'slug' => 'weather-grid'),
+            array('title' => 'Weather Tabs', 'icon' => '📑', 'description' => 'Switch between city weather tabs quickly', 'pro' => false, 'slug' => 'weather-tabs'),
+            array('title' => 'Weather Table', 'icon' => '📊', 'description' => 'Display weather data in a clean table format', 'pro' => false, 'slug' => 'weather-table'),
+            array('title' => 'Radar Map by Windy', 'icon' => '🗺️', 'description' => 'Interactive radar map with weather overlays', 'pro' => false, 'slug' => 'radar-map'),
+            array('title' => 'Detailed Forecast', 'icon' => '📆', 'description' => '7-day weather forecast with charts', 'pro' => true, 'slug' => 'detailed-forecast'),
+            array('title' => 'AQI - Detailed Air Quality', 'icon' => 'AQI', 'description' => 'Extended air quality details for cities', 'pro' => true, 'slug' => 'aqi-detailed'),
+            array('title' => 'Weather Accordion', 'icon' => '📋', 'description' => 'Collapsible weather details for multiple cities', 'pro' => false, 'slug' => 'weather-accordion'),
+            array('title' => 'Weather Map by OWM', 'icon' => '🗺️', 'description' => 'Weather map integration from OpenWeatherMap', 'pro' => true, 'slug' => 'weather-map-owm'),
+            array('title' => 'Historical Weather Data', 'icon' => '📈', 'description' => 'Display past weather data and trends', 'pro' => true, 'slug' => 'historical-weather'),
+            array('title' => 'Historical Air Quality Data', 'icon' => 'AQI', 'description' => 'View historical pollutant levels over time', 'pro' => true, 'slug' => 'historical-aqi'),
+            array('title' => 'Sun & Moon Times', 'icon' => '🌙', 'description' => 'Sunrise, sunset, moonrise and moonset times', 'pro' => false, 'slug' => 'sun-moon'),
+            array('title' => 'Section Heading', 'icon' => 'H', 'description' => 'Add elegant section headings anywhere', 'pro' => false, 'slug' => 'section-heading'),
+            array('title' => 'Location Weather Shortcode', 'icon' => '📍', 'description' => 'Display weather using shortcode for any location', 'pro' => false, 'slug' => 'shortcode')
+        );
         ?>
         <div class="wrap hsq-blocks-page">
             <div class="hsq-blocks-header">
@@ -381,138 +399,33 @@ class HSQ_Weather_Admin_Settings {
                 <p><?php _e('Explore available blocks for Gutenberg editor.', 'hsq-weather'); ?></p>
             </div>
             
-            <!-- Blocks Grid -->
             <div class="hsq-blocks-grid">
-                
-                <!-- Block 1: Weather Card -->
-                <div class="hsq-block-item">
-                    <div class="hsq-block-icon">🌤️</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Weather Card', 'hsq-weather'); ?></h3>
-                        <p class="hsq-block-desc"><?php _e('Display single city weather in beautiful card layout', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
+                <?php foreach ($blocks as $block): ?>
+                    <div class="hsq-block-card<?php echo $block['pro'] ? ' hsq-pro-card' : ''; ?>">
+                        <div class="hsq-block-card-left">
+                            <div class="hsq-block-card-icon"><?php echo esc_html($block['icon']); ?></div>
+                            <div class="hsq-block-card-info">
+                                <h3><?php echo esc_html($block['title']); ?><?php if ($block['pro']): ?> <span class="hsq-pro-label"><?php _e('Pro', 'hsq-weather'); ?></span><?php endif; ?></h3>
+                                <p><?php echo esc_html($block['description']); ?></p>
+                                <div class="hsq-block-card-links">
+                                    <a href="#" class="hsq-block-link"><?php _e('Docs', 'hsq-weather'); ?></a>
+                                    <span class="hsq-block-divider">•</span>
+                                    <a href="#" class="hsq-block-link"><?php _e('Demo', 'hsq-weather'); ?></a>
+                                </div>
+                            </div>
                         </div>
+                        <label class="hsq-toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="hsq-slider"></span>
+                        </label>
                     </div>
-                </div>
-                
-                <!-- Block 2: Weather Grid -->
-                <div class="hsq-block-item">
-                    <div class="hsq-block-icon">🌍</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Weather Grid', 'hsq-weather'); ?></h3>
-                        <p class="hsq-block-desc"><?php _e('Display multiple cities weather in responsive grid', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Block 3: Radar Map -->
-                <div class="hsq-block-item hsq-pro-block">
-                    <div class="hsq-block-icon">🗺️</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Radar Map', 'hsq-weather'); ?>
-                            <span class="hsq-pro-badge"><?php _e('Pro', 'hsq-weather'); ?></span>
-                        </h3>
-                        <p class="hsq-block-desc"><?php _e('Interactive weather radar map integration', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Block 4: Weather Accordion -->
-                <div class="hsq-block-item">
-                    <div class="hsq-block-icon">📋</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Weather Accordion', 'hsq-weather'); ?></h3>
-                        <p class="hsq-block-desc"><?php _e('Collapsible weather details for multiple cities', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Block 5: Air Quality Data -->
-                <div class="hsq-block-item hsq-pro-block">
-                    <div class="hsq-block-icon">🌫️</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Air Quality Data', 'hsq-weather'); ?>
-                            <span class="hsq-pro-badge"><?php _e('Pro', 'hsq-weather'); ?></span>
-                        </h3>
-                        <p class="hsq-block-desc"><?php _e('Display AQI (Air Quality Index) with colors', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Block 6: Weather Shortcode -->
-                <div class="hsq-block-item">
-                    <div class="hsq-block-icon">🔧</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Weather Shortcode', 'hsq-weather'); ?></h3>
-                        <p class="hsq-block-desc"><?php _e('Use shortcode [hsq_weather] anywhere', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Block 7: Weekly Forecast -->
-                <div class="hsq-block-item hsq-pro-block">
-                    <div class="hsq-block-icon">📅</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Weekly Forecast', 'hsq-weather'); ?>
-                            <span class="hsq-pro-badge"><?php _e('Pro', 'hsq-weather'); ?></span>
-                        </h3>
-                        <p class="hsq-block-desc"><?php _e('7-day weather forecast with charts', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Block 8: Weather Alert -->
-                <div class="hsq-block-item hsq-pro-block">
-                    <div class="hsq-block-icon">⚠️</div>
-                    <div class="hsq-block-content">
-                        <h3 class="hsq-block-title"><?php _e('Weather Alerts', 'hsq-weather'); ?>
-                            <span class="hsq-pro-badge"><?php _e('Pro', 'hsq-weather'); ?></span>
-                        </h3>
-                        <p class="hsq-block-desc"><?php _e('Severe weather warnings and alerts', 'hsq-weather'); ?></p>
-                        <div class="hsq-block-actions">
-                            <a href="#" class="hsq-block-btn hsq-docs-btn"><?php _e('Docs', 'hsq-weather'); ?></a>
-                            <a href="#" class="hsq-block-btn hsq-demo-btn"><?php _e('Demo', 'hsq-weather'); ?></a>
-                        </div>
-                    </div>
-                </div>
-                
+                <?php endforeach; ?>
             </div>
-            
-            <!-- See Full Features Button -->
+        
             <div class="hsq-blocks-footer">
                 <a href="#" class="hsq-full-features-btn">
                     <?php _e('See Full Features →', 'hsq-weather'); ?>
                 </a>
-            </div>
-            
-            <!-- Support Section -->
-            <div class="hsq-blocks-support">
-                <div class="hsq-support-card">
-                    <h3><?php _e('Need Help?', 'hsq-weather'); ?></h3>
-                    <p><?php _e('For personalized assistance, reach out to our skilled support team for prompt help.', 'hsq-weather'); ?></p>
-                    <a href="#" class="button button-primary"><?php _e('Ask Now', 'hsq-weather'); ?></a>
-                    <a href="#" class="button"><?php _e('Join Community', 'hsq-weather'); ?></a>
-                </div>
             </div>
         </div>
         <?php
