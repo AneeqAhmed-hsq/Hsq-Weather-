@@ -121,7 +121,17 @@ function hsq_weather_enqueue_frontend() {
 // Enqueue admin scripts and styles
 add_action('admin_enqueue_scripts', 'hsq_weather_enqueue_admin');
 function hsq_weather_enqueue_admin($hook) {
-    if ($hook == 'toplevel_page_hsq-weather-settings') {
+    $admin_hooks = array(
+        'toplevel_page_hsq-weather',
+        'hsq-weather_page_hsq-weather-getting-started',
+        'hsq-weather_page_hsq-weather-blocks',
+        'hsq-weather_page_hsq-weather-templates',
+        'hsq-weather_page_hsq-weather-settings',
+        'hsq-weather_page_hsq-weather-manage',
+        'hsq-weather_page_hsq-weather-tools'
+    );
+
+    if (in_array($hook, $admin_hooks, true)) {
         wp_enqueue_style('hsq-weather-admin', HSQ_WEATHER_PLUGIN_URL . 'admin/css/admin-style.css', array(), HSQ_WEATHER_VERSION);
         wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script('hsq-weather-admin', HSQ_WEATHER_PLUGIN_URL . 'admin/js/admin-script.js', array('jquery', 'jquery-ui-sortable'), HSQ_WEATHER_VERSION, true);

@@ -22,14 +22,73 @@ class HSQ_Weather_Admin_Settings {
      * Add admin menu
      */
     public function add_admin_menu() {
+        // Main dashboard page
         add_menu_page(
             __('HSQ Weather', 'hsq-weather'),
             __('HSQ Weather', 'hsq-weather'),
             'manage_options',
-            'hsq-weather-settings',
-            array($this, 'render_settings_page'),
+            'hsq-weather',
+            array($this, 'render_dashboard_page'),
             'dashicons-cloud',
             30
+        );
+
+        // Submenus
+        add_submenu_page(
+            'hsq-weather',
+            __('Getting Started', 'hsq-weather'),
+            __('Getting Started', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-getting-started',
+            array($this, 'render_getting_started_page')
+        );
+        add_submenu_page(
+            'hsq-weather',
+            __('Blocks', 'hsq-weather'),
+            __('Blocks', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-blocks',
+            array($this, 'render_blocks_page')
+        );
+        add_submenu_page(
+            'hsq-weather',
+            __('Saved Templates', 'hsq-weather'),
+            __('Saved Templates', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-templates',
+            array($this, 'render_templates_page')
+        );
+        add_submenu_page(
+            'hsq-weather',
+            __('Settings', 'hsq-weather'),
+            __('Settings', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-settings',
+            array($this, 'render_settings_page')
+        );
+        add_submenu_page(
+            'hsq-weather',
+            __('Manage Weather', 'hsq-weather'),
+            __('Manage Weather', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-manage',
+            array($this, 'render_manage_weather_page')
+        );
+        add_submenu_page(
+            'hsq-weather',
+            __('Add New Weather Tools', 'hsq-weather'),
+            __('Add New Weather Tools', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-tools',
+            array($this, 'render_tools_page')
+        );
+        add_submenu_page(
+            'hsq-weather',
+            __('Upgrade to Pro', 'hsq-weather'),
+            __('<span style="color: #ff9800;">⬆ Upgrade to Pro</span>', 'hsq-weather'),
+            'manage_options',
+            'hsq-weather-pro',
+            array($this, 'redirect_to_pro_page')
         );
     }
     
@@ -231,7 +290,235 @@ class HSQ_Weather_Admin_Settings {
         </div>
         <?php
     }
-    
+
+    /**
+     * Render Dashboard Page
+     */
+    public function render_dashboard_page() {
+        ?>
+        <div class="wrap hsq-weather-dashboard">
+            <h1><?php _e('HSQ Weather Dashboard', 'hsq-weather'); ?></h1>
+            <div class="hsq-dashboard-grid">
+                <div class="hsq-dashboard-card">
+                    <h3><?php _e('Weather Statistics', 'hsq-weather'); ?></h3>
+                    <?php 
+                    $settings = get_option('hsq_weather_settings');
+                    $city_count = isset($settings['cities']) ? count($settings['cities']) : 0;
+                    ?>
+                    <p><?php echo sprintf(__('Total Cities: %d', 'hsq-weather'), $city_count); ?></p>
+                    <p><?php _e('API Status: Active', 'hsq-weather'); ?></p>
+                    <p><?php _e('Cache: Enabled', 'hsq-weather'); ?></p>
+                </div>
+                <div class="hsq-dashboard-card">
+                    <h3><?php _e('Quick Actions', 'hsq-weather'); ?></h3>
+                    <a href="?page=hsq-weather-manage" class="button button-primary"><?php _e('Manage Cities', 'hsq-weather'); ?></a>
+                    <a href="?page=hsq-weather-settings" class="button"><?php _e('Settings', 'hsq-weather'); ?></a>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render Getting Started Page
+     */
+    public function render_getting_started_page() {
+        ?>
+        <div class="wrap hsq-getting-started">
+            <div class="hsq-welcome-header">
+                <h1><?php _e('Welcome to HSQ Weather!', 'hsq-weather'); ?></h1>
+                <p><?php _e('Thank you for installing HSQ Weather! This guide will help you get started with the plugin.', 'hsq-weather'); ?></p>
+            </div>
+            
+            <div class="hsq-video-section">
+                <h2><?php _e('Getting Started Video', 'hsq-weather'); ?></h2>
+                <div class="hsq-video-wrapper">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            
+            <div class="hsq-steps-grid">
+                <div class="hsq-step">
+                    <div class="step-number">1</div>
+                    <h3><?php _e('Add Cities', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Go to Manage Weather page and add your desired cities.', 'hsq-weather'); ?></p>
+                    <a href="?page=hsq-weather-manage" class="button"><?php _e('Add Cities →', 'hsq-weather'); ?></a>
+                </div>
+                
+                <div class="hsq-step">
+                    <div class="step-number">2</div>
+                    <h3><?php _e('Configure Settings', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Customize columns, theme, refresh time and more.', 'hsq-weather'); ?></p>
+                    <a href="?page=hsq-weather-settings" class="button"><?php _e('Configure →', 'hsq-weather'); ?></a>
+                </div>
+                
+                <div class="hsq-step">
+                    <div class="step-number">3</div>
+                    <h3><?php _e('Display Weather', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Use shortcode [hsq_weather] on any page or post.', 'hsq-weather'); ?></p>
+                    <code>[hsq_weather]</code>
+                </div>
+            </div>
+            
+            <div class="hsq-support-box">
+                <h3><?php _e('Need Help?', 'hsq-weather'); ?></h3>
+                <p><?php _e('For personalized assistance, reach out to our support team.', 'hsq-weather'); ?></p>
+                <a href="#" class="button button-primary"><?php _e('Ask Now', 'hsq-weather'); ?></a>
+                <a href="#" class="button"><?php _e('Join Community', 'hsq-weather'); ?></a>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render Blocks Page
+     */
+    public function render_blocks_page() {
+        ?>
+        <div class="wrap hsq-blocks-page">
+            <h1><?php _e('Weather Blocks', 'hsq-weather'); ?></h1>
+            <p><?php _e('Explore available blocks for Gutenberg editor.', 'hsq-weather'); ?></p>
+            
+            <div class="hsq-blocks-grid">
+                <div class="hsq-block-card">
+                    <div class="block-icon">🌤️</div>
+                    <h3><?php _e('Weather Grid Block', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Display weather in responsive grid layout', 'hsq-weather'); ?></p>
+                    <code>[hsq_weather]</code>
+                </div>
+                
+                <div class="hsq-block-card">
+                    <div class="block-icon">📍</div>
+                    <h3><?php _e('Single City Block', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Display weather for single city', 'hsq-weather'); ?></p>
+                    <p class="coming-soon"><?php _e('Coming Soon', 'hsq-weather'); ?></p>
+                </div>
+                
+                <div class="hsq-block-card">
+                    <div class="block-icon">📊</div>
+                    <h3><?php _e('Weather Chart Block', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Display weather statistics in charts', 'hsq-weather'); ?></p>
+                    <p class="coming-soon"><?php _e('Coming Soon', 'hsq-weather'); ?></p>
+                </div>
+            </div>
+            
+            <div class="hsq-features-link">
+                <a href="#" class="button button-primary"><?php _e('See Full Features →', 'hsq-weather'); ?></a>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render Templates Page
+     */
+    public function render_templates_page() {
+        $templates = get_option('hsq_weather_templates', array());
+        ?>
+        <div class="wrap hsq-templates-page">
+            <h1><?php _e('Saved Templates', 'hsq-weather'); ?></h1>
+            
+            <button class="button button-primary hsq-save-current"><?php _e('Save Current Layout as Template', 'hsq-weather'); ?></button>
+            
+            <div class="hsq-templates-grid">
+                <?php if (empty($templates)): ?>
+                    <p><?php _e('No templates saved yet. Create your first template!', 'hsq-weather'); ?></p>
+                <?php else: ?>
+                    <?php foreach ($templates as $template): ?>
+                        <div class="hsq-template-card">
+                            <h3><?php echo esc_html($template['name']); ?></h3>
+                            <p><?php echo sprintf(__('Cities: %d', 'hsq-weather'), count($template['cities'])); ?></p>
+                            <button class="button hsq-load-template" data-id="<?php echo $template['id']; ?>"><?php _e('Load', 'hsq-weather'); ?></button>
+                            <button class="button hsq-delete-template" data-id="<?php echo $template['id']; ?>"><?php _e('Delete', 'hsq-weather'); ?></button>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render Manage Weather Page (Cities Management)
+     */
+    public function render_manage_weather_page() {
+        $settings = get_option('hsq_weather_settings');
+        $cities = isset($settings['cities']) ? $settings['cities'] : array();
+        ?>
+        <div class="wrap hsq-manage-weather">
+            <h1><?php _e('Manage Weather Cities', 'hsq-weather'); ?></h1>
+            
+            <div class="hsq-add-city">
+                <input type="text" id="hsq-city-search" placeholder="<?php _e('Search city name...', 'hsq-weather'); ?>" autocomplete="off">
+                <div id="hsq-search-results" style="display:none;"></div>
+                <button type="button" id="hsq-add-city-btn" class="button button-primary"><?php _e('Add City', 'hsq-weather'); ?></button>
+            </div>
+            
+            <div class="hsq-cities-list">
+                <h3><?php _e('Cities (Drag to reorder)', 'hsq-weather'); ?></h3>
+                <ul id="hsq-cities-sortable">
+                    <?php foreach ($cities as $index => $city): ?>
+                        <li data-index="<?php echo $index; ?>" data-lat="<?php echo esc_attr($city['lat']); ?>" data-lon="<?php echo esc_attr($city['lon']); ?>">
+                            <span class="drag-handle">⋮⋮</span>
+                            <span class="city-name"><?php echo esc_html($city['name']); ?></span>
+                            <button type="button" class="hsq-delete-city button button-small"><?php _e('Delete', 'hsq-weather'); ?></button>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render Tools Page
+     */
+    public function render_tools_page() {
+        ?>
+        <div class="wrap hsq-tools-page">
+            <h1><?php _e('Add New Weather Tools', 'hsq-weather'); ?></h1>
+            
+            <div class="hsq-tools-grid">
+                <div class="hsq-tool-card">
+                    <div class="tool-icon">🌡️</div>
+                    <h3><?php _e('Air Quality Index', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Display air quality data with your weather info', 'hsq-weather'); ?></p>
+                    <button class="button hsq-install-tool" data-tool="aqi"><?php _e('Install', 'hsq-weather'); ?></button>
+                </div>
+                
+                <div class="hsq-tool-card">
+                    <div class="tool-icon">📅</div>
+                    <h3><?php _e('7-Day Forecast', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Extended weather forecast for the week', 'hsq-weather'); ?></p>
+                    <button class="button hsq-install-tool" data-tool="forecast"><?php _e('Install', 'hsq-weather'); ?></button>
+                </div>
+                
+                <div class="hsq-tool-card">
+                    <div class="tool-icon">🎨</div>
+                    <h3><?php _e('Weather Widget', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Sidebar widget for weather display', 'hsq-weather'); ?></p>
+                    <button class="button hsq-install-tool" data-tool="widget"><?php _e('Install', 'hsq-weather'); ?></button>
+                </div>
+                
+                <div class="hsq-tool-card">
+                    <div class="tool-icon">📊</div>
+                    <h3><?php _e('Weather Analytics', 'hsq-weather'); ?></h3>
+                    <p><?php _e('Track weather views and interactions', 'hsq-weather'); ?></p>
+                    <button class="button hsq-install-tool" data-tool="analytics"><?php _e('Install', 'hsq-weather'); ?></button>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Redirect to Pro Page
+     */
+    public function redirect_to_pro_page() {
+        wp_redirect('https://yourwebsite.com/hsq-weather-pro');
+        exit;
+    }
+
     /**
      * AJAX: Add city
      */
