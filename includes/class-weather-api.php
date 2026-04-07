@@ -37,7 +37,7 @@ class HSQ_Weather_API {
             );
             
             // Cache for 30 days (geocoding rarely changes)
-            set_transient($cache_key, $result, 30 * DAY_IN_SECONDS);
+            set_transient($cache_key, $result, 30 * 86400);
             return $result;
         }
         

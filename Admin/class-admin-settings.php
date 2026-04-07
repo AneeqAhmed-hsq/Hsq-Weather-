@@ -76,13 +76,14 @@ class HSQ_Weather_Admin_Settings {
         }
         
         if (isset($input['cities']) && is_array($input['cities'])) {
-            $output['cities'] = array_map(function($city) {
-                return array(
+            $output['cities'] = array();
+            foreach ($input['cities'] as $city) {
+                $output['cities'][] = array(
                     'name' => sanitize_text_field($city['name']),
                     'lat' => floatval($city['lat']),
                     'lon' => floatval($city['lon'])
                 );
-            }, $input['cities']);
+            }
         }
         
         // Clear cache when settings are saved
