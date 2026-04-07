@@ -616,14 +616,14 @@ class HSQ_Weather_Admin_Settings {
      */
     public function render_add_new_weather_page() {
         $layouts = array(
-            'vertical-card' => array('icon' => '📋', 'name' => 'Vertical Card', 'desc' => 'Clean vertical layout', 'demo' => '📋'),
-            'horizontal' => array('icon' => '➡️', 'name' => 'Horizontal', 'desc' => 'Side-by-side layout', 'demo' => '➡️'),
-            'table' => array('icon' => '📊', 'name' => 'Table', 'desc' => 'Table format', 'demo' => '📊'),
-            'tabs' => array('icon' => '📑', 'name' => 'Tabs', 'desc' => 'Tabbed view', 'demo' => '📑'),
-            'accordion' => array('icon' => '📁', 'name' => 'Accordion', 'desc' => 'Collapsible items', 'demo' => '📁'),
-            'grid' => array('icon' => '🔲', 'name' => 'Grid', 'desc' => 'Grid layout', 'demo' => '🔲'),
-            'combined' => array('icon' => '🔗', 'name' => 'Combined', 'desc' => 'Mixed layout', 'demo' => '🔗'),
-            'weather-map' => array('icon' => '🗺️', 'name' => 'Weather Map', 'desc' => 'Interactive map', 'demo' => '🗺️')
+            'vertical-card' => array('icon' => '📋', 'name' => 'Vertical Card', 'desc' => 'Clean vertical layout', 'preview' => '<div style="display: grid; gap: 8px;"><div style="height: 26px; background: #f3f4f6; border-radius: 4px;"></div><div style="display: grid; grid-template-columns: 86px 1fr; gap: 8px;"><div style="height: 50px; background: #f3f4f6; border-radius: 8px;"></div><div style="display: grid; gap: 6px;"><div style="height: 12px; background: #f3f4f6; border-radius: 6px;"></div><div style="height: 12px; width: 70%; background: #f3f4f6; border-radius: 6px;"></div></div></div><div style="height: 8px; background: #f3f4f6; border-radius: 4px;"></div><div style="height: 8px; background: #f3f4f6; border-radius: 4px;"></div></div>'),
+            'horizontal' => array('icon' => '➡️', 'name' => 'Horizontal', 'desc' => 'Side-by-side layout', 'preview' => '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"><div style="height: 70px; background: #f3f4f6; border-radius: 8px;"></div><div style="display: grid; gap: 8px;"><div style="height: 16px; background: #f3f4f6; border-radius: 6px;"></div><div style="display: grid; gap: 6px;"><div style="height: 12px; background: #f3f4f6; border-radius: 6px;"></div><div style="height: 12px; background: #f3f4f6; border-radius: 6px; width: 60%;"></div></div></div></div>'),
+            'table' => array('icon' => '📊', 'name' => 'Table', 'desc' => 'Table format', 'preview' => '<div style="display: grid; gap: 6px;"><div style="height: 14px; background: #f3f4f6; border-radius: 6px;"></div><div style="display: grid; gap: 6px;"><div style="height: 12px; background: #f3f4f6; border-radius: 6px;"></div><div style="height: 12px; background: #f3f4f6; border-radius: 6px;"></div></div></div>'),
+            'tabs' => array('icon' => '📑', 'name' => 'Tabs', 'desc' => 'Tabbed view', 'preview' => '<div style="display: grid; gap: 6px;"><div style="display: flex; gap: 4px;"><div style="flex: 1; height: 14px; background: #f3f4f6; border-radius: 6px;"></div><div style="flex: 1; height: 14px; background: #f3f4f6; border-radius: 6px;"></div></div><div style="height: 12px; background: #f3f4f6; border-radius: 6px;"></div><div style="height: 12px; background: #f3f4f6; border-radius: 6px;"></div></div>'),
+            'accordion' => array('icon' => '📁', 'name' => 'Accordion', 'desc' => 'Collapsible items', 'preview' => '<div style="display: grid; gap: 8px;"><div style="height: 14px; background: #f3f4f6; border-radius: 6px;"></div><div style="height: 14px; background: #f3f4f6; border-radius: 6px;"></div><div style="height: 14px; background: #f3f4f6; border-radius: 6px;"></div></div>'),
+            'grid' => array('icon' => '🔲', 'name' => 'Grid', 'desc' => 'Grid layout', 'preview' => '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;"><div style="height: 40px; background: #f3f4f6; border-radius: 8px;"></div><div style="height: 40px; background: #f3f4f6; border-radius: 8px;"></div><div style="height: 40px; background: #f3f4f6; border-radius: 8px;"></div><div style="height: 40px; background: #f3f4f6; border-radius: 8px;"></div></div>'),
+            'combined' => array('icon' => '🔗', 'name' => 'Combined', 'desc' => 'Mixed layout', 'preview' => '<div style="display: grid; gap: 8px;"><div style="height: 30px; background: #f3f4f6; border-radius: 8px;"></div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"><div style="height: 28px; background: #f3f4f6; border-radius: 8px;"></div><div style="height: 28px; background: #f3f4f6; border-radius: 8px;"></div></div></div>'),
+            'weather-map' => array('icon' => '🗺️', 'name' => 'Weather Map', 'desc' => 'Interactive map', 'preview' => '<div style="height: 90px; background: #f3f4f6; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #9ca3af;">Map preview</div>')
         );
         
         // Sample weather data for preview
@@ -668,21 +668,32 @@ class HSQ_Weather_Admin_Settings {
             .hsq-save-actions { display: flex; gap: 10px; margin-top: 30px; }
             
             /* Preview Layouts */
-            .hsq-preview-vertical { display: flex; flex-direction: column; gap: 6px; }
-            .hsq-preview-vertical .temp { font-size: 32px; font-weight: bold; color: #1e40af; }
-            .hsq-preview-vertical .info { font-size: 12px; color: #666; border-top: 1px solid #eee; padding-top: 6px; }
-            .hsq-preview-horizontal { display: flex; gap: 20px; align-items: center; }
-            .hsq-preview-horizontal .temp { font-size: 48px; font-weight: bold; color: #1e40af; }
-            .hsq-preview-horizontal .details { flex: 1; font-size: 13px; }
-            .hsq-preview-table { width: 100%; font-size: 13px; }
-            .hsq-preview-table th, .hsq-preview-table td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+            .hsq-preview-vertical { display: flex; justify-content: center; }
+            .hsq-preview-vertical .hsq-weather-card { width: 100%; max-width: 360px; border-radius: 16px; border: 1px solid #e5e7eb; background: #fff; padding: 20px; }
+            .hsq-preview-vertical .hsq-card-header, .hsq-preview-tabs .hsq-card-header, .hsq-preview-grid .hsq-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+            .hsq-preview-vertical .hsq-city-name, .hsq-preview-tabs .hsq-city-name, .hsq-preview-grid .hsq-city-name { font-size: 18px; font-weight: 700; color: #111827; }
+            .hsq-preview-vertical .hsq-weather-icon, .hsq-preview-tabs .hsq-weather-icon, .hsq-preview-grid .hsq-weather-icon { font-size: 28px; }
+            .hsq-preview-vertical .hsq-card-body, .hsq-preview-tabs .hsq-card-body, .hsq-preview-grid .hsq-card-body { display: grid; gap: 10px; }
+            .hsq-preview-vertical .hsq-temperature, .hsq-preview-tabs .hsq-temperature, .hsq-preview-grid .hsq-temperature { font-size: 32px; font-weight: 700; color: #1e40af; }
+            .hsq-preview-vertical .hsq-wind, .hsq-preview-tabs .hsq-wind, .hsq-preview-grid .hsq-wind { font-size: 14px; color: #4b5563; }
+            .hsq-preview-vertical .hsq-humidity, .hsq-preview-tabs .hsq-humidity, .hsq-preview-grid .hsq-humidity { font-size: 14px; color: #4b5563; }
+            .hsq-preview-horizontal { overflow-x: auto; width: 100%; }
+            .hsq-preview-horizontal .hsq-horizontal-wrapper { display: flex; gap: 16px; padding: 10px 0; min-width: min-content; }
+            .hsq-preview-horizontal .hsq-horizontal-card { min-width: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 18px; text-align: center; color: white; }
+            .hsq-preview-horizontal .hsq-city-name { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+            .hsq-preview-horizontal .hsq-weather-icon { font-size: 28px; margin: 10px 0; display: block; }
+            .hsq-preview-horizontal .hsq-temperature { font-size: 28px; font-weight: 700; }
+            .hsq-preview-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+            .hsq-preview-table th, .hsq-preview-table td { padding: 10px 12px; border-bottom: 1px solid #eee; text-align: left; }
             .hsq-preview-table th { background: #f3f4f6; font-weight: 600; }
             .hsq-preview-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-            .hsq-preview-tabs button { padding: 6px 12px; background: #e5e7eb; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+            .hsq-preview-tabs button { padding: 8px 14px; background: #e5e7eb; border: none; border-radius: 999px; cursor: pointer; font-size: 12px; font-weight: 600; color: #4b5563; }
             .hsq-preview-tabs button.active { background: #fb923c; color: white; }
-            .hsq-preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .hsq-preview-grid-item { background: #f3f4f6; padding: 12px; border-radius: 6px; text-align: center; font-size: 12px; }
-            @media (max-width: 768px) { .hsq-two-col { grid-template-columns: 1fr; } }
+            .hsq-preview-tabs-container { border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; background: white; }
+            .hsq-preview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+            .hsq-preview-grid .hsq-weather-card { border-radius: 16px; border: 1px solid #e5e7eb; background: #fff; padding: 18px; }
+            .hsq-preview-tabs .hsq-weather-card { padding: 18px; }
+            @media (max-width: 768px) { .hsq-two-col { grid-template-columns: 1fr; } .hsq-preview-horizontal .hsq-horizontal-wrapper { min-width: auto; flex-wrap: wrap; } }
         </style>
         <div class="wrap">
             <div class="hsq-add-weather-header">
@@ -831,31 +842,40 @@ class HSQ_Weather_Admin_Settings {
 
         function updatePreview() {
             const preview = document.getElementById('hsq-preview');
-            if (!selectedLayout) return;
+            if (!preview || !selectedLayout) return;
 
             let html = '';
             switch(selectedLayout) {
                 case 'vertical-card':
                     html = `<div class="hsq-preview-vertical">
-                        <div class="temp">${sampleWeather.temperature}°C</div>
-                        <div style="font-size: 18px; color: #333;">${sampleWeather.condition}</div>
-                        <div class="info">Humidity: ${sampleWeather.humidity}% | Wind: ${sampleWeather.wind_speed} km/h</div>
-                        <div class="info">Feels like ${sampleWeather.feels_like}°C</div>
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">${sampleWeather.city}</div>
+                                <div class="hsq-weather-icon">☀️</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature}°C</div>
+                                <div class="hsq-wind">💨 Wind: ${sampleWeather.wind_speed} km/h</div>
+                                <div class="hsq-humidity">💧 Humidity: ${sampleWeather.humidity}%</div>
+                            </div>
+                        </div>
                     </div>`;
                     break;
                 case 'horizontal':
-                    html = `<div class="hsq-preview-horizontal" style="background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 18px; width: 100%;">
-                        <div style="flex: 1;">
-                            <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">${sampleWeather.city}</div>
-                            <div style="font-size: 12px; color: #9ca3af; margin-bottom: 10px;">6:29 pm, Apr 7, 2026</div>
-                            <div style="font-size: 42px; font-weight: 700; color: #ef4444;">${sampleWeather.temperature}°C</div>
-                            <div style="font-size: 14px; color: #374151; margin-top: 6px;">${sampleWeather.condition}</div>
-                        </div>
-                        <div style="min-width: 160px; text-align: right; font-size: 13px; color: #4b5563;">
-                            <div style="margin-bottom: 8px;">Wind: ${sampleWeather.wind_speed} km/h</div>
-                            <div style="margin-bottom: 8px;">Humidity: ${sampleWeather.humidity}%</div>
-                            <div style="margin-bottom: 8px;">Pressure: ${sampleWeather.pressure} mb</div>
-                            <div>Visibility: ${sampleWeather.visibility} km</div>
+                    html = `<div class="hsq-preview-horizontal">
+                        <div class="hsq-horizontal-wrapper">
+                            <div class="hsq-horizontal-card">
+                                <div class="hsq-city-name">${sampleWeather.city}</div>
+                                <div class="hsq-weather-icon">☀️</div>
+                                <div class="hsq-temperature">${sampleWeather.temperature}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed} km/h</div>
+                            </div>
+                            <div class="hsq-horizontal-card">
+                                <div class="hsq-city-name">Paris</div>
+                                <div class="hsq-weather-icon">⛅</div>
+                                <div class="hsq-temperature">${sampleWeather.temperature - 3}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed + 5} km/h</div>
+                            </div>
                         </div>
                     </div>`;
                     break;
@@ -870,14 +890,23 @@ class HSQ_Weather_Admin_Settings {
                     </table>`;
                     break;
                 case 'tabs':
-                    html = `<div>
+                    html = `<div class="hsq-preview-tabs-container">
                         <div class="hsq-preview-tabs">
                             <button class="active">Now</button>
                             <button>Tomorrow</button>
                             <button>Weekly</button>
                         </div>
-                        <div style="font-size: 24px; font-weight: bold; color: #1e40af;">${sampleWeather.temperature}°C</div>
-                        <div style="color: #666;">${sampleWeather.condition}</div>
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">${sampleWeather.city}</div>
+                                <div class="hsq-weather-icon">⛅</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature}°C</div>
+                                <div class="hsq-wind">💨 Wind: ${sampleWeather.wind_speed} km/h</div>
+                                <div class="hsq-humidity">💧 Humidity: ${sampleWeather.humidity}%</div>
+                            </div>
+                        </div>
                     </div>`;
                     break;
                 case 'accordion':
@@ -894,24 +923,70 @@ class HSQ_Weather_Admin_Settings {
                     break;
                 case 'grid':
                     html = `<div class="hsq-preview-grid">
-                        <div class="hsq-preview-grid-item">
-                            <strong>${sampleWeather.temperature}°C</strong><br>Temp
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">${sampleWeather.city}</div>
+                                <div class="hsq-weather-icon">☀️</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed} km/h</div>
+                            </div>
                         </div>
-                        <div class="hsq-preview-grid-item">
-                            <strong>${sampleWeather.humidity}%</strong><br>Humidity
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">Berlin</div>
+                                <div class="hsq-weather-icon">🌧️</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature - 1}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed + 2} km/h</div>
+                            </div>
                         </div>
-                        <div class="hsq-preview-grid-item">
-                            <strong>${sampleWeather.wind_speed}</strong><br>Wind
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">Tokyo</div>
+                                <div class="hsq-weather-icon">🌤️</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature + 2}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed - 3} km/h</div>
+                            </div>
                         </div>
-                        <div class="hsq-preview-grid-item">
-                            <strong>${sampleWeather.pressure}</strong><br>Pressure
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">Sydney</div>
+                                <div class="hsq-weather-icon">🌦️</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature + 4}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed + 1} km/h</div>
+                            </div>
                         </div>
                     </div>`;
                     break;
                 case 'combined':
-                    html = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div><strong>${sampleWeather.temperature}°C</strong><br>${sampleWeather.condition}</div>
-                        <div><strong>Details</strong><br>Humidity: ${sampleWeather.humidity}%<br>Wind: ${sampleWeather.wind_speed} km/h</div>
+                    html = `<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">${sampleWeather.city}</div>
+                                <div class="hsq-weather-icon">☀️</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed} km/h</div>
+                            </div>
+                        </div>
+                        <div class="hsq-weather-card">
+                            <div class="hsq-card-header">
+                                <div class="hsq-city-name">Forecast</div>
+                                <div class="hsq-weather-icon">🌤️</div>
+                            </div>
+                            <div class="hsq-card-body">
+                                <div class="hsq-temperature">${sampleWeather.temperature + 1}°C</div>
+                                <div class="hsq-humidity">💧 ${sampleWeather.humidity}%</div>
+                            </div>
+                        </div>
                     </div>`;
                     break;
                 case 'weather-map':
@@ -924,20 +999,25 @@ class HSQ_Weather_Admin_Settings {
             preview.innerHTML = html;
         }
 
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const tab = this.dataset.tab;
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.hsq-tab-content').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+        function initHsqAddNewWeatherPage() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tab = this.dataset.tab;
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.hsq-tab-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+                });
             });
-        });
 
-        // Initialize default horizontal preview
-        document.addEventListener('DOMContentLoaded', function() {
             selectLayout('horizontal');
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initHsqAddNewWeatherPage);
+        } else {
+            initHsqAddNewWeatherPage();
+        }
         </script>
         <?php
     }
