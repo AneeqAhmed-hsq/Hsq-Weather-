@@ -153,7 +153,7 @@ function hsq_weather_register_blocks() {
         return;
     }
     
-    require_once HSQ_WEATHER_PLUGIN_DIR . 'includes/class-weather-blocks.php';
+    require_once HSQ_WEATHER_PLUGIN_DIR . 'includes/class-hsq-blocks.php';
     new HSQ_Weather_Blocks();
 }
 add_action('init', 'hsq_weather_register_blocks');
