@@ -802,6 +802,11 @@ class HSQ_Weather_Admin_Settings {
         </script>
         <?php
     }
+
+    /**
+     * Render Tools Page
+     */
+    public function render_tools_page() {
         ?>
         <div class="wrap hsq-tools-page">
             <h1><?php _e('Add New Weather Tools', 'hsq-weather'); ?></h1>
