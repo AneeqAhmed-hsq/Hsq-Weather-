@@ -885,7 +885,7 @@ class HSQ_Weather_Admin_Settings {
             }
             const templateSection = document.querySelector('.hsq-templates-section');
             if (templateSection) {
-                templateSection.style.display = layout === 'vertical-card' ? 'block' : 'none';
+                templateSection.style.display = (layout === 'vertical-card' || layout === 'horizontal') ? 'block' : 'none';
             }
             updatePreview();
         }
