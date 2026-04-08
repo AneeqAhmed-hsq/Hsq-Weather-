@@ -866,12 +866,12 @@ class HSQ_Weather_Admin_Settings {
         <script>
         const sampleWeather = <?php echo json_encode($sample_weather); ?>;
         const templateOptions = {
-            'template-one': { city: sampleWeather.city, icon: '☀️', temp: sampleWeather.temperature, wind: sampleWeather.wind_speed },
-            'template-two': { city: 'Paris', icon: '⛅', temp: sampleWeather.temperature - 3, wind: sampleWeather.wind_speed + 5 },
-            'template-three': { city: 'Berlin', icon: '🌧️', temp: sampleWeather.temperature - 1, wind: sampleWeather.wind_speed + 2 },
-            'template-four': { city: 'Tokyo', icon: '🌤️', temp: sampleWeather.temperature + 2, wind: Math.max(sampleWeather.wind_speed - 3, 0) },
-            'template-five': { city: 'Sydney', icon: '🌦️', temp: sampleWeather.temperature + 4, wind: sampleWeather.wind_speed + 1 },
-            'template-six': { city: 'Dubai', icon: '☀️', temp: sampleWeather.temperature + 7, wind: sampleWeather.wind_speed + 3 },
+            'template-one': { city: sampleWeather.city, icon: '☀️', temp: sampleWeather.temperature, wind: sampleWeather.wind_speed, humidity: 71, pressure: 1023, visibility: 10 },
+            'template-two': { city: 'Paris', icon: '⛅', temp: sampleWeather.temperature - 3, wind: sampleWeather.wind_speed + 5, humidity: 65, pressure: 1018, visibility: 12 },
+            'template-three': { city: 'Berlin', icon: '🌧️', temp: sampleWeather.temperature - 1, wind: sampleWeather.wind_speed + 2, humidity: 80, pressure: 1015, visibility: 8 },
+            'template-four': { city: 'Tokyo', icon: '🌤️', temp: sampleWeather.temperature + 2, wind: Math.max(sampleWeather.wind_speed - 3, 0), humidity: 58, pressure: 1020, visibility: 15 },
+            'template-five': { city: 'Sydney', icon: '🌦️', temp: sampleWeather.temperature + 4, wind: sampleWeather.wind_speed + 1, humidity: 62, pressure: 1025, visibility: 18 },
+            'template-six': { city: 'Dubai', icon: '☀️', temp: sampleWeather.temperature + 7, wind: sampleWeather.wind_speed + 3, humidity: 35, pressure: 1010, visibility: 20 },
         };
         let selectedLayout = 'horizontal';
         let selectedTemplate = 'template-one';
@@ -924,21 +924,69 @@ class HSQ_Weather_Admin_Settings {
                     </div>`;
                     break;
                 case 'horizontal':
-                    html = `<div class="hsq-preview-horizontal">
-                        <div class="hsq-horizontal-wrapper">
-                            <div class="hsq-horizontal-card">
-                                <div class="hsq-city-name">${cityName}</div>
-                                <div class="hsq-weather-icon">☀️</div>
-                                <div class="hsq-temperature">${sampleWeather.temperature}°C</div>
-                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed} km/h</div>
+                    const templateData = templateOptions[selectedTemplate] || templateOptions['template-one'];
+                    const displayCity = (selectedLayout === 'horizontal' && selectedTemplate !== 'template-one') ? templateData.city : cityName;
+                    const displayTemp = (selectedLayout === 'horizontal' && selectedTemplate !== 'template-one') ? templateData.temp : sampleWeather.temperature;
+                    const displayWind = (selectedLayout === 'horizontal' && selectedTemplate !== 'template-one') ? templateData.wind : sampleWeather.wind_speed;
+                    const displayIcon = (selectedLayout === 'horizontal' && selectedTemplate !== 'template-one') ? templateData.icon : '☀️';
+                    const displayHumidity = (selectedLayout === 'horizontal' && selectedTemplate !== 'template-one') ? templateData.humidity : sampleWeather.humidity;
+                    const displayPressure = (selectedLayout === 'horizontal' && selectedTemplate !== 'template-one') ? templateData.pressure : sampleWeather.pressure;
+                    const displayVisibility = (selectedLayout === 'horizontal' && selectedTemplate !== 'template-one') ? templateData.visibility : 10;
+                    
+                    html = `<div class="hsq-preview-horizontal-advanced" style="background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%); color: white; border-radius: 12px; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 24px;">
+                            <div style="display: flex; gap: 16px; align-items: center;">
+                                <div style="font-size: 64px;">${displayIcon}</div>
+                                <div>
+                                    <div style="font-size: 48px; font-weight: bold;">${displayTemp}°C</div>
+                                    <div style="font-size: 18px; opacity: 0.95;">${displayCity}</div>
+                                </div>
                             </div>
-                            <div class="hsq-horizontal-card">
-                                <div class="hsq-city-name">Tokyo</div>
-                                <div class="hsq-weather-icon">🌤️</div>
-                                <div class="hsq-temperature">${sampleWeather.temperature + 2}°C</div>
-                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed + 2} km/h</div>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; font-size: 13px;">
+                                <div>
+                                    <div style="opacity: 0.8;">💧 Humidity</div>
+                                    <div style="font-weight: 600;">${displayHumidity}%</div>
+                                </div>
+                                <div>
+                                    <div style="opacity: 0.8;">💨 Wind</div>
+                                    <div style="font-weight: 600;">${displayWind} mph</div>
+                                </div>
+                                <div>
+                                    <div style="opacity: 0.8;">🌡️ Pressure</div>
+                                    <div style="font-weight: 600;">${displayPressure} mb</div>
+                                </div>
+                                <div>
+                                    <div style="opacity: 0.8;">👁️ Visibility</div>
+                                    <div style="font-weight: 600;">${displayVisibility} km</div>
+                                </div>
                             </div>
                         </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Hourly Forecast</div>
+                            <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">
+                                <div style="text-align: center; min-width: 80px; font-size: 12px;">
+                                    <div style="opacity: 0.9;">10 am</div>
+                                    <div style="font-size: 24px; margin: 8px 0;">☁️</div>
+                                    <div style="font-weight: 600;">${displayTemp - 3}°C</div>
+                                </div>
+                                <div style="text-align: center; min-width: 80px; font-size: 12px;">
+                                    <div style="opacity: 0.9;">1 pm</div>
+                                    <div style="font-size: 24px; margin: 8px 0;">⛅</div>
+                                    <div style="font-weight: 600;">${displayTemp - 1}°C</div>
+                                </div>
+                                <div style="text-align: center; min-width: 80px; font-size: 12px;">
+                                    <div style="opacity: 0.9;">4 pm</div>
+                                    <div style="font-size: 24px; margin: 8px 0;">🌤️</div>
+                                    <div style="font-weight: 600;">${displayTemp}°C</div>
+                                </div>
+                                <div style="text-align: center; min-width: 80px; font-size: 12px;">
+                                    <div style="opacity: 0.9;">7 pm</div>
+                                    <div style="font-size: 24px; margin: 8px 0;">☁️</div>
+                                    <div style="font-weight: 600;">${displayTemp - 2}°C</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; font-size: 11px; opacity: 0.8; text-align: center;">Weather from OpenWeatherMap</div>
                     </div>`;
                     break;
                 case 'table':
