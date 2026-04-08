@@ -789,7 +789,7 @@ class HSQ_Weather_Admin_Settings {
                         <div class="hsq-two-col">
                             <div class="hsq-form-group">
                                 <label><?php _e('City Name', 'hsq-weather'); ?></label>
-                                <input type="text" id="city-name" placeholder="<?php _e('London, GB', 'hsq-weather'); ?>" onchange="updatePreview()">
+                                <input type="text" id="city-name" placeholder="<?php _e('London, GB', 'hsq-weather'); ?>" oninput="updatePreview()">
                                 <small><?php _e('Write your city name and country code only', 'hsq-weather'); ?></small>
                             </div>
                             <div class="hsq-form-group">
@@ -902,6 +902,8 @@ class HSQ_Weather_Admin_Settings {
 
         function updatePreview() {
             const preview = document.getElementById('hsq-preview');
+            const cityInput = document.getElementById('city-name');
+            const cityName = cityInput && cityInput.value.trim() ? cityInput.value.trim() : sampleWeather.city;
             if (!preview || !selectedLayout) return;
 
             let html = '';
@@ -922,20 +924,19 @@ class HSQ_Weather_Admin_Settings {
                     </div>`;
                     break;
                 case 'horizontal':
-                    const templateData = templateOptions[selectedTemplate] || templateOptions['template-one'];
                     html = `<div class="hsq-preview-horizontal">
                         <div class="hsq-horizontal-wrapper">
                             <div class="hsq-horizontal-card">
-                                <div class="hsq-city-name">${sampleWeather.city}</div>
+                                <div class="hsq-city-name">${cityName}</div>
                                 <div class="hsq-weather-icon">☀️</div>
                                 <div class="hsq-temperature">${sampleWeather.temperature}°C</div>
                                 <div class="hsq-wind">💨 ${sampleWeather.wind_speed} km/h</div>
                             </div>
                             <div class="hsq-horizontal-card">
-                                <div class="hsq-city-name">${templateData.city}</div>
-                                <div class="hsq-weather-icon">${templateData.icon}</div>
-                                <div class="hsq-temperature">${templateData.temp}°C</div>
-                                <div class="hsq-wind">💨 ${templateData.wind} km/h</div>
+                                <div class="hsq-city-name">Tokyo</div>
+                                <div class="hsq-weather-icon">🌤️</div>
+                                <div class="hsq-temperature">${sampleWeather.temperature + 2}°C</div>
+                                <div class="hsq-wind">💨 ${sampleWeather.wind_speed + 2} km/h</div>
                             </div>
                         </div>
                     </div>`;
