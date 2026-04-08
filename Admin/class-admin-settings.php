@@ -687,10 +687,11 @@ class HSQ_Weather_Admin_Settings {
             .hsq-preview-vertical .hsq-wind, .hsq-preview-tabs .hsq-wind, .hsq-preview-grid .hsq-wind { font-size: 14px; color: #4b5563; }
             .hsq-preview-vertical .hsq-humidity, .hsq-preview-tabs .hsq-humidity, .hsq-preview-grid .hsq-humidity { font-size: 14px; color: #4b5563; }
             .hsq-preview-horizontal { overflow-x: auto; width: 100%; }
-            .hsq-preview-horizontal .hsq-horizontal-wrapper { display: flex; gap: 16px; padding: 10px 0; min-width: min-content; }
-            .hsq-preview-horizontal .hsq-horizontal-card { min-width: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 18px; text-align: center; color: white; }
-            .hsq-preview-horizontal .hsq-city-name { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
-            .hsq-preview-horizontal .hsq-weather-icon { font-size: 28px; margin: 10px 0; display: block; }
+            .hsq-preview-horizontal .hsq-horizontal-wrapper { display: flex; gap: 20px; padding: 10px 0; min-width: min-content; }
+            .hsq-preview-horizontal .hsq-horizontal-card { min-width: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; text-align: center; color: white; transition: transform 0.3s ease; }
+            .hsq-preview-horizontal .hsq-horizontal-card:hover { transform: translateY(-4px); }
+            .hsq-preview-horizontal .hsq-city-name { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+            .hsq-preview-horizontal .hsq-weather-icon { font-size: 36px; margin: 10px 0; display: block; }
             .hsq-preview-horizontal .hsq-temperature { font-size: 28px; font-weight: 700; }
             .hsq-preview-table { width: 100%; font-size: 13px; border-collapse: collapse; }
             .hsq-preview-table th, .hsq-preview-table td { padding: 10px 12px; border-bottom: 1px solid #eee; text-align: left; }
@@ -704,12 +705,14 @@ class HSQ_Weather_Admin_Settings {
             .hsq-preview-tabs .hsq-weather-card { padding: 18px; }
             .hsq-templates-section { margin-top: 20px; }
             .hsq-template-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 14px; }
-            .hsq-template-card { border: 2px solid #e5e7eb; border-radius: 12px; padding: 14px; background: #fff; cursor: pointer; transition: all 0.2s ease; text-align: center; }
-            .hsq-template-card.active, .hsq-template-card:hover { border-color: #667eea; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.12); }
-            .hsq-template-thumb { display: grid; gap: 5px; margin-bottom: 10px; }
-            .hsq-template-row { height: 8px; background: #e5e7eb; border-radius: 999px; }
-            .hsq-template-row.short { width: 60%; margin-left: auto; }
-            .hsq-template-row.half { width: 50%; }
+            .hsq-template-card { border: 2px solid #e5e7eb; border-radius: 18px; padding: 16px; background: #fff; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: stretch; min-height: 210px; }
+            .hsq-template-card.active, .hsq-template-card:hover { border-color: #667eea; box-shadow: 0 14px 35px rgba(102, 126, 234, 0.12); }
+            .hsq-template-thumb { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 16px; padding: 14px; min-height: 150px; }
+            .hsq-template-row { height: 10px; background: #e5e7eb; border-radius: 999px; }
+            .hsq-template-row.short { width: 55%; margin-left: auto; }
+            .hsq-template-row.half { width: 45%; }
+            .hsq-template-thumb .hsq-template-card-icon { width: 100%; height: 64px; background: #e5e7eb; border-radius: 14px; }
+            .hsq-template-card .name { margin-top: auto; font-weight: 700; color: #111827; }
             @media (max-width: 768px) { .hsq-two-col { grid-template-columns: 1fr; } .hsq-preview-horizontal .hsq-horizontal-wrapper { min-width: auto; flex-wrap: wrap; } }
         </style>
         <div class="wrap">
@@ -742,17 +745,17 @@ class HSQ_Weather_Admin_Settings {
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <div class="hsq-templates-section">
+                    <div class="hsq-templates-section" style="display: none;">
                         <h2><?php _e('Templates', 'hsq-weather'); ?></h2>
                         <div class="hsq-template-grid">
                             <?php foreach ($templates as $key => $label): ?>
                                 <?php $template_active = $key === 'template-one' ? ' active' : ''; ?>
                                 <div class="hsq-template-card<?php echo $template_active; ?>" data-template="<?php echo esc_attr($key); ?>" onclick="selectTemplate('<?php echo esc_attr($key); ?>')">
                                     <div class="hsq-template-thumb">
-                                        <div class="hsq-template-row"></div>
-                                        <div class="hsq-template-row short"></div>
+                                        <div class="hsq-template-card-icon"></div>
                                         <div class="hsq-template-row"></div>
                                         <div class="hsq-template-row half"></div>
+                                        <div class="hsq-template-row short"></div>
                                     </div>
                                     <div class="name"><?php echo esc_html($label); ?></div>
                                 </div>
@@ -879,6 +882,10 @@ class HSQ_Weather_Admin_Settings {
             const selectedCard = document.querySelector('[data-layout="' + layout + '"]');
             if (selectedCard) {
                 selectedCard.classList.add('active');
+            }
+            const templateSection = document.querySelector('.hsq-templates-section');
+            if (templateSection) {
+                templateSection.style.display = layout === 'vertical-card' ? 'block' : 'none';
             }
             updatePreview();
         }
